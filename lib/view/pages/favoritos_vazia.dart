@@ -3,8 +3,8 @@ import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Favoritos extends StatelessWidget {
-  const Favoritos({super.key});
+class FavoritosVazia extends StatelessWidget {
+  const FavoritosVazia({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,16 @@
-import 'package:adota_pets_mobile/view/pages/favoritos.dart';
+import 'package:adota_pets_mobile/view/pages/favoritos_vazia.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => FavoritesProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

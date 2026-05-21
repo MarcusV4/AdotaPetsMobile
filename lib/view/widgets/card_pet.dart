@@ -1,6 +1,9 @@
 import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/view/pages/tela_detalhe_pet.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CardPet extends StatelessWidget {
   final PetModelo pet;
@@ -8,7 +11,15 @@ class CardPet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Consumer<FavoritesProvider>(
+      builder: (context, favs, _) {
+        final isFav = favs.isFavorite(pet);
+          return GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => TelaDetalhePet(pet: pet)),
+              ),
+    child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -135,8 +146,11 @@ class CardPet extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
-  }
+  },
+);
+}
 }
 
 class _TypeBadge extends StatelessWidget {

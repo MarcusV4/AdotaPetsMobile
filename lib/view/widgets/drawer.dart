@@ -1,4 +1,4 @@
-import 'package:adota_pets_mobile/view/pages/favoritos.dart';
+import 'package:adota_pets_mobile/view/pages/favoritos_vazia.dart';
 import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +75,7 @@ class DrawerApp extends StatelessWidget {
               icon: Icons.favorite_outline,
               label: 'Favoritos',
               isActive: activeItem == DrawerItem.favoritos,
-              onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Favoritos())),
+              onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => FavoritosVazia())),
             ),
             _DrawerItem(
               icon: Icons.chat_bubble_outline,
