@@ -1,5 +1,6 @@
-import 'package:adota_pets_mobile/view/pages/feed.dart';
+
 import 'package:adota_pets_mobile/view/pages/tela_cadastro.dart';
+import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/widgets/abas_auth.dart';
 import 'package:adota_pets_mobile/view/widgets/botao_login.dart';
 import 'package:adota_pets_mobile/view/widgets/campo_texto.dart';
@@ -48,7 +49,7 @@ class TelaLogin extends StatelessWidget{
                 const SizedBox(height: 14),
                 const CampoTexto(hint: "Sua senha", obscureText: true),
                 const SizedBox(height: 24),
-                BotaoLogin(label: "Entrar", onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Feed()))),
+                BotaoLogin(label: "Entrar", onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TelaFeed()))),
                 const SizedBox(height: 20),
                 Center(
                   child: Row(

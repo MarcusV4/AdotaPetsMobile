@@ -1,5 +1,4 @@
 import 'package:adota_pets_mobile/view/pages/favoritos.dart';
-import 'package:adota_pets_mobile/view/pages/feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,5 @@
-import 'package:adota_pets_mobile/view/pages/feed.dart';
+
+import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
 import 'package:adota_pets_mobile/view/widgets/abas_auth.dart';
 import 'package:adota_pets_mobile/view/widgets/botao_login.dart';
@@ -49,7 +50,7 @@ class TelaCadastro extends StatelessWidget{
               const SizedBox(height: 14),
               const CampoTexto(hint: "Sua senha", obscureText: true),
               const SizedBox(height: 24),
-              BotaoLogin(label: "Criar conta", onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Feed()))),
+              BotaoLogin(label: "Criar conta", onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TelaFeed()))),
               const SizedBox(height: 20),
               Center(
                 child: Row(
