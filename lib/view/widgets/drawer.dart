@@ -9,6 +9,28 @@ class DrawerApp extends StatelessWidget {
   final DrawerItem activeItem;
   const DrawerApp({super.key, required this.activeItem});
 
+  void _navigate(BuildContext context, DrawerItem destination) {
+    if (activeItem == destination) {
+      Navigator.pop(context);
+      return;
+    }
+
+    Navigator.pop(context);
+
+    Navigator.pushReplacementNamed(context, _routeFor(destination));
+  }
+
+  String _routeFor(DrawerItem item) {
+    switch (item) {
+      case DrawerItem.feed:
+        return '/feed';
+      case DrawerItem.favoritos:
+        return '/favoritos';
+      default:
+        return '/feed';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -29,14 +51,18 @@ class DrawerApp extends StatelessWidget {
                       color: Color(0xFFE8622A),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.pets, color: Colors.white, size: 22),
+                    child: const Icon(
+                      Icons.pets,
+                      color: Colors.white,
+                      size: 22,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'AdotaPets',
+                        'PawFinder',
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -56,8 +82,11 @@ class DrawerApp extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.close,
-                        color: Color(0xFF888888), size: 22),
+                    child: const Icon(
+                      Icons.close,
+                      color: Color(0xFF888888),
+                      size: 22,
+                    ),
                   ),
                 ],
               ),
@@ -69,31 +98,31 @@ class DrawerApp extends StatelessWidget {
               icon: Icons.home_outlined,
               label: 'Feed',
               isActive: activeItem == DrawerItem.feed,
-              onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => TelaFeed())),
+              onTap: () => _navigate(context, DrawerItem.feed),
             ),
             _DrawerItem(
               icon: Icons.favorite_outline,
               label: 'Favoritos',
               isActive: activeItem == DrawerItem.favoritos,
-              onTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => FavoritosVazia())),
+              onTap: () => _navigate(context, DrawerItem.favoritos),
             ),
             _DrawerItem(
               icon: Icons.chat_bubble_outline,
               label: 'Conversas',
               isActive: activeItem == DrawerItem.conversas,
-              onTap: () => Navigator.pop(context),
+              onTap: () => _navigate(context, DrawerItem.conversas),
             ),
             _DrawerItem(
               icon: Icons.person_outline,
               label: 'Perfil',
               isActive: activeItem == DrawerItem.perfil,
-              onTap: () => Navigator.pop(context),
+              onTap: () => _navigate(context, DrawerItem.perfil),
             ),
             _DrawerItem(
               icon: Icons.settings_outlined,
               label: 'Configurações',
               isActive: activeItem == DrawerItem.configuracoes,
-              onTap: () => Navigator.pop(context),
+              onTap: () => _navigate(context, DrawerItem.configuracoes),
             ),
 
             const Spacer(),
@@ -170,18 +199,18 @@ class _DrawerItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(icon,
-                  size: 20,
-                  color: isActive ? Colors.white : const Color(0xFF666666)),
+              Icon(
+                icon,
+                size: 20,
+                color: isActive ? Colors.white : const Color(0xFF666666),
+              ),
               const SizedBox(width: 14),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 15,
-                  fontWeight:
-                  isActive ? FontWeight.w600 : FontWeight.w400,
-                  color:
-                  isActive ? Colors.white : const Color(0xFF1A1A1A),
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  color: isActive ? Colors.white : const Color(0xFF1A1A1A),
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/view/pages/tela_detalhe_pet.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:adota_pets_mobile/view/widgets/card_pet.dart';
 import 'package:adota_pets_mobile/view/widgets/filtro.dart';
@@ -70,7 +71,11 @@ class _FeedBodyState extends State<BodyFeed> {
             decoration: InputDecoration(
               hintText: 'Buscar por nome, raça ou localização...',
               hintStyle: TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
-              prefixIcon: Icon(Icons.search, color: Color(0xFFBBB3AA), size: 20),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Color(0xFFBBB3AA),
+                size: 20,
+              ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(vertical: 14),
             ),
@@ -87,7 +92,10 @@ class _FeedBodyState extends State<BodyFeed> {
               child: GestureDetector(
                 onTap: () => setState(() => _activeFilter = f.label),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: isActive ? const Color(0xFFE8622A) : Colors.white,
                     borderRadius: BorderRadius.circular(24),
@@ -102,7 +110,9 @@ class _FeedBodyState extends State<BodyFeed> {
                       Icon(
                         f.icon,
                         size: 16,
-                        color: isActive ? Colors.white : const Color(0xFF888888),
+                        color: isActive
+                            ? Colors.white
+                            : const Color(0xFF888888),
                       ),
                       const SizedBox(width: 6),
                       Text(
@@ -110,7 +120,9 @@ class _FeedBodyState extends State<BodyFeed> {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: isActive ? Colors.white : const Color(0xFF1A1A1A),
+                          color: isActive
+                              ? Colors.white
+                              : const Color(0xFF1A1A1A),
                         ),
                       ),
                     ],
@@ -123,10 +135,18 @@ class _FeedBodyState extends State<BodyFeed> {
         const SizedBox(height: 20),
 
         // Cards
-        ..._filtered.map((pet) => Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: CardPet(pet: pet),
-        )),
+        ..._filtered.map(
+          (pet) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: CardPet(
+              pet: pet,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => TelaDetalhePet(pet: pet)),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

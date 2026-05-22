@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 
 class CardPet extends StatelessWidget {
   final PetModelo pet;
-  const CardPet({super.key, required this.pet});
+  final VoidCallback onTap;
+  const CardPet({super.key, required this.pet, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +16,7 @@ class CardPet extends StatelessWidget {
       builder: (context, favs, _) {
         final isFav = favs.isFavorite(pet);
           return GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => TelaDetalhePet(pet: pet)),
-              ),
+            onTap: onTap,
     child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -71,18 +69,23 @@ class CardPet extends StatelessWidget {
               Positioned(
                 top: 10,
                 right: 10,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.favorite_border,
-                    size: 18,
-                    color: Color(0xFF888888),
-                  ),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => favs.toggle(pet),
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.favorite_border,
+                      size: 18,
+                      color: Color(0xFF888888),
+                    ),
+                  )
+
                 ),
               ),
             ],

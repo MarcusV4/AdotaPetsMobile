@@ -1,4 +1,6 @@
 import 'package:adota_pets_mobile/view/pages/favoritos_vazia.dart';
+import 'package:adota_pets_mobile/view/pages/tela_favoritos.dart';
+import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: TelaLogin(),
+      routes: {
+        '/feed': (_) => const TelaFeed(),
+        '/favoritos': (_) => const TelaFavoritos(),
+      },
     );
   }
 }

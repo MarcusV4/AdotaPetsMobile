@@ -1,4 +1,5 @@
 import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ class TelaDetalhePet extends StatelessWidget {
   String get _sex => 'Fêmea';
   String get _about =>
       '${pet.name} é uma ${pet.breed} brincalhona e carinhosa que adora todo mundo que conhece. '
-          'Ela gosta de longas caminhadas no parque, jogar bola e se aconchegar no sofá. '
-          '${pet.name} se dá bem com crianças e outros cachorros, tornando-a a companheira familiar perfeita.';
+      'Ela gosta de longas caminhadas no parque, jogar bola e se aconchegar no sofá. '
+      '${pet.name} se dá bem com crianças e outros cachorros, tornando-a a companheira familiar perfeita.';
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +29,17 @@ class TelaDetalhePet extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: const Color(0xFFF5F0EB),
+          drawer: DrawerApp(activeItem: DrawerItem.feed),
           appBar: AppBar(
             backgroundColor: const Color(0xFFF5F0EB),
             elevation: 0,
             titleSpacing: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
-              onPressed: () {},
+            leading: Builder(
+              builder: (ctx) => IconButton(
+                icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+                onPressed: () =>
+                    Scaffold.of(ctx).openDrawer(), // ALTERADO: era () {}
+              ),
             ),
             title: const Text(
               'PawFinder',
@@ -61,11 +66,18 @@ class TelaDetalhePet extends StatelessWidget {
                       onTap: () => Navigator.pop(context),
                       child: const Row(
                         children: [
-                          Icon(Icons.arrow_back, size: 18, color: Color(0xFF1A1A1A)),
+                          Icon(
+                            Icons.arrow_back,
+                            size: 18,
+                            color: Color(0xFF1A1A1A),
+                          ),
                           SizedBox(width: 4),
                           Text(
                             'Voltar',
-                            style: TextStyle(fontSize: 14, color: Color(0xFF1A1A1A)),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1A1A1A),
+                            ),
                           ),
                         ],
                       ),
@@ -89,7 +101,11 @@ class TelaDetalhePet extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: const Center(
-                                child: Icon(Icons.pets, size: 48, color: Color(0xFFBBB3AA)),
+                                child: Icon(
+                                  Icons.pets,
+                                  size: 48,
+                                  color: Color(0xFFBBB3AA),
+                                ),
                               ),
                             ),
                           ),
@@ -102,11 +118,16 @@ class TelaDetalhePet extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
                             decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+                              borderRadius: const BorderRadius.vertical(
+                                bottom: Radius.circular(16),
+                              ),
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, Colors.black.withOpacity(0.65)],
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.65),
+                                ],
                               ),
                             ),
                             child: Column(
@@ -122,7 +143,10 @@ class TelaDetalhePet extends StatelessWidget {
                                 ),
                                 Text(
                                   '${pet.breed} • ${pet.age} • $_sex',
-                                  style: const TextStyle(fontSize: 13, color: Colors.white70),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white70,
+                                  ),
                                 ),
                               ],
                             ),
@@ -144,7 +168,9 @@ class TelaDetalhePet extends StatelessWidget {
                               child: Icon(
                                 isFav ? Icons.favorite : Icons.favorite_border,
                                 size: 20,
-                                color: isFav ? const Color(0xFFE8622A) : const Color(0xFF888888),
+                                color: isFav
+                                    ? const Color(0xFFE8622A)
+                                    : const Color(0xFF888888),
                               ),
                             ),
                           ),
@@ -221,21 +247,30 @@ class TelaDetalhePet extends StatelessWidget {
                             spacing: 8,
                             runSpacing: 8,
                             children: pet.tags
-                                .map((tag) => Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFF3EE),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: const Color(0xFFE8622A).withOpacity(0.3)),
-                              ),
-                              child: Text(
-                                tag,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: Color(0xFFE8622A),
-                                ),
-                              ),
-                            ))
+                                .map(
+                                  (tag) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFF3EE),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: const Color(
+                                          0xFFE8622A,
+                                        ).withOpacity(0.3),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      tag,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xFFE8622A),
+                                      ),
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                         ],
@@ -257,11 +292,23 @@ class TelaDetalhePet extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          CardSaude(icon: Icons.shield_outlined, color: const Color(0xFF4CAF50), label: 'Vacinado'),
+                          CardSaude(
+                            icon: Icons.shield_outlined,
+                            color: const Color(0xFF4CAF50),
+                            label: 'Vacinado',
+                          ),
                           const SizedBox(height: 8),
-                          CardSaude(icon: Icons.content_cut, color: const Color(0xFF2196F3), label: 'Castrado'),
+                          CardSaude(
+                            icon: Icons.content_cut,
+                            color: const Color(0xFF2196F3),
+                            label: 'Castrado',
+                          ),
                           const SizedBox(height: 8),
-                          CardSaude(icon: Icons.location_on_outlined, color: const Color(0xFFE8622A), label: pet.location),
+                          CardSaude(
+                            icon: Icons.location_on_outlined,
+                            color: const Color(0xFFE8622A),
+                            label: pet.location,
+                          ),
                         ],
                       ),
                     ),
@@ -274,7 +321,10 @@ class TelaDetalhePet extends StatelessWidget {
                         children: [
                           const Text(
                             'Publicado por',
-                            style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF888888),
+                            ),
                           ),
                           const SizedBox(height: 12),
                           Row(
@@ -312,11 +362,18 @@ class TelaDetalhePet extends StatelessWidget {
                                   SizedBox(height: 2),
                                   Row(
                                     children: [
-                                      Icon(Icons.email_outlined, size: 12, color: Color(0xFF888888)),
+                                      Icon(
+                                        Icons.email_outlined,
+                                        size: 12,
+                                        color: Color(0xFF888888),
+                                      ),
                                       SizedBox(width: 4),
                                       Text(
                                         'mvc7730@gmail.com',
-                                        style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xFF888888),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -347,7 +404,9 @@ class TelaDetalhePet extends StatelessWidget {
                         label: Text('Adotar ${pet.name}'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFE8622A),
-                          disabledBackgroundColor: const Color(0xFFE8622A).withOpacity(0.4),
+                          disabledBackgroundColor: const Color(
+                            0xFFE8622A,
+                          ).withOpacity(0.4),
                           foregroundColor: Colors.white,
                           disabledForegroundColor: Colors.white70,
                           elevation: 0,
@@ -364,7 +423,9 @@ class TelaDetalhePet extends StatelessWidget {
                         Icon(
                           isFav ? Icons.favorite : Icons.favorite_border,
                           size: 14,
-                          color: isFav ? const Color(0xFFE8622A) : const Color(0xFF888888),
+                          color: isFav
+                              ? const Color(0xFFE8622A)
+                              : const Color(0xFF888888),
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -373,7 +434,9 @@ class TelaDetalhePet extends StatelessWidget {
                               : 'Favorite este pet para iniciar o chat',
                           style: TextStyle(
                             fontSize: 12,
-                            color: isFav ? const Color(0xFFE8622A) : const Color(0xFF888888),
+                            color: isFav
+                                ? const Color(0xFFE8622A)
+                                : const Color(0xFF888888),
                           ),
                         ),
                       ],
