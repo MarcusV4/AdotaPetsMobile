@@ -26,6 +26,10 @@ class DrawerApp extends StatelessWidget {
         return '/feed';
       case DrawerItem.favoritos:
         return '/favoritos';
+      case DrawerItem.configuracoes:
+        return '/config';
+      case DrawerItem.perfil:
+        return '/perfil';
       default:
         return '/feed';
     }
