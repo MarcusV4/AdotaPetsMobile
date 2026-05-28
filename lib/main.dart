@@ -1,5 +1,6 @@
 import 'package:adota_pets_mobile/view/pages/favoritos_vazia.dart';
 import 'package:adota_pets_mobile/view/pages/tela_config.dart';
+import 'package:adota_pets_mobile/view/pages/tela_conversas.dart';
 import 'package:adota_pets_mobile/view/pages/tela_favoritos.dart';
 import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/favoritos': (_) => const TelaFavoritos(),
         '/config': (_) => const TelaConfig(),
         '/perfil': (_) => const TelaPerfil(),
+        '/conversas': (_) => const TelaConversas(),
       },
     );
   }

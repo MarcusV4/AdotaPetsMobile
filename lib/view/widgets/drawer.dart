@@ -30,6 +30,8 @@ class DrawerApp extends StatelessWidget {
         return '/config';
       case DrawerItem.perfil:
         return '/perfil';
+      case DrawerItem.conversas:
+        return '/conversas';
       default:
         return '/feed';
     }
