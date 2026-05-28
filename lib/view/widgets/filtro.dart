@@ -3,6 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Filtros {
   final String label;
-  final IconData icon;
+  final Widget icon;
   const Filtros({required this.label, required this.icon});
 }

@@ -16,10 +16,10 @@ class BodyFeed extends StatefulWidget {
 
 class _FeedBodyState extends State<BodyFeed> {
   String _activeFilter = 'Todos';
-  final List<Filtros> _filters = [
-    Filtros(label: 'Todos', icon: Icons.pets),
-    Filtros(label: 'Cães', icon: Icons.sports),
-    Filtros(label: 'Gatos', icon: Icons.catching_pokemon),
+  static final List<Filtros> _filters = [
+    Filtros(label: 'Todos', icon: const FaIcon(FontAwesomeIcons.paw)),
+    Filtros(label: 'Cães', icon: const FaIcon(FontAwesomeIcons.dog)),
+    Filtros(label: 'Gatos', icon: const FaIcon(FontAwesomeIcons.cat)),
   ];
 
   List<PetModelo> get _filtered {
@@ -107,12 +107,14 @@ class _FeedBodyState extends State<BodyFeed> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        f.icon,
-                        size: 16,
-                        color: isActive
-                            ? Colors.white
-                            : const Color(0xFF888888),
+                      IconTheme(
+                        data: IconThemeData(
+                          color: isActive
+                              ? Colors.white
+                              : const Color(0xFF888888),
+                          size: 14,
+                        ),
+                        child: f.icon,
                       ),
                       const SizedBox(width: 6),
                       Text(
