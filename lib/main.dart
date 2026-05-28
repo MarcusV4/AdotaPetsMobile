@@ -5,14 +5,18 @@ import 'package:adota_pets_mobile/view/pages/tela_favoritos.dart';
 import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
 import 'package:adota_pets_mobile/view/pages/tela_perfil.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => FavoritesProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProvider(create: (_) => ConversasProvider()),
+      ],
       child: const MyApp(),
     ),
   );

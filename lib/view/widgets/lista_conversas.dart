@@ -1,11 +1,12 @@
+import 'package:adota_pets_mobile/view/modelo/conversa_modelo.dart';
 import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
 import 'package:adota_pets_mobile/view/widgets/card_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/titulo_conversas.dart';
 import 'package:flutter/cupertino.dart';
 
 class ListaConversas extends StatelessWidget {
-  final List<PetModelo> pets;
-  const ListaConversas({required this.pets});
+  final List<Conversa> conversas;
+  const ListaConversas({required this.conversas});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +15,10 @@ class ListaConversas extends StatelessWidget {
       children: [
         TituloConversas(),
         const SizedBox(height: 20),
-        ...pets.map(
-          (pet) => Padding(
+        ...conversas.map(
+          (conversa) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: CardConversas(pet: pet),
+            child: CardConversas(conversa: conversa),
           ),
         ),
       ],

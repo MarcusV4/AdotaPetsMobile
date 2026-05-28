@@ -1,6 +1,7 @@
 import 'package:adota_pets_mobile/view/pages/conversas_vazia.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/lista_conversas.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +13,7 @@ class TelaConversas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Gera uma conversa para cada pet favoritado (adotado)
-    final pets = context.watch<FavoritesProvider>().favorites;
+    final conversas = context.watch<ConversasProvider>().conversas;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F0EB),
@@ -41,7 +41,9 @@ class TelaConversas extends StatelessWidget {
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.conversas),
-      body: pets.isEmpty ? const ConversasVazia() : ListaConversas(pets: pets),
+      body: conversas.isEmpty
+          ? const ConversasVazia()
+          : ListaConversas(conversas: conversas),
     );
   }
 }

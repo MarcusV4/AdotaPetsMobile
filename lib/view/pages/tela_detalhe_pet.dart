@@ -1,6 +1,8 @@
 import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -399,7 +401,17 @@ class TelaDetalhePet extends StatelessWidget {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton.icon(
-                        onPressed: isFav ? () {} : null,
+                        onPressed: isFav
+                            ? () {
+                                context.read<ConversasProvider>().openChat(pet);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => TelaChat(pet: pet),
+                                  ),
+                                );
+                              }
+                            : null,
                         icon: const Icon(Icons.chat_bubble_outline, size: 18),
                         label: Text('Adotar ${pet.name}'),
                         style: ElevatedButton.styleFrom(
