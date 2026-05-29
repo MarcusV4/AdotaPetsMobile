@@ -1,9 +1,8 @@
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/conversa_modelo.dart';
+
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../modelo/conversa_modelo.dart';
 
 class CardConversas extends StatelessWidget {
   final Conversa conversa;
@@ -51,7 +50,7 @@ class CardConversas extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pet.name,
+                    pet.nome,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,

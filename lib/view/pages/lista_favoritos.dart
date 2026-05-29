@@ -1,4 +1,4 @@
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
 import 'package:adota_pets_mobile/view/pages/tela_detalhe_pet.dart';
 import 'package:adota_pets_mobile/view/widgets/card_pet.dart';
 import 'package:flutter/cupertino.dart';

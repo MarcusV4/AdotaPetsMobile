@@ -1,4 +1,5 @@
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+
 import 'package:adota_pets_mobile/view/pages/chat_vazio.dart';
 import 'package:adota_pets_mobile/view/widgets/bolha_mensagem.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,7 +49,7 @@ class _ChatScreenState extends State<TelaChat> {
     final conversa = context
         .watch<ConversasProvider>()
         .conversas
-        .where((c) => c.pet.name == widget.pet.name)
+        .where((c) => c.pet.nome == widget.pet.nome)
         .first;
 
     return Scaffold(
@@ -97,7 +98,7 @@ class _ChatScreenState extends State<TelaChat> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.pet.name,
+                    widget.pet.nome,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -123,7 +124,7 @@ class _ChatScreenState extends State<TelaChat> {
           // Área de mensagens
           Expanded(
             child: conversa.messages.isEmpty
-                ? ChatVazio(petName: widget.pet.name)
+                ? ChatVazio(petName: widget.pet.nome)
                 : ListView.builder(
                     controller: _scrollController,
                     padding: const EdgeInsets.symmetric(

@@ -1,5 +1,5 @@
-import 'package:adota_pets_mobile/view/modelo/conversa_modelo.dart';
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/conversa_modelo.dart';
+
 import 'package:adota_pets_mobile/view/widgets/card_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/titulo_conversas.dart';
 import 'package:flutter/cupertino.dart';

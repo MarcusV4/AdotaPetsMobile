@@ -1,4 +1,6 @@
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/services/pet_service.dart';
+
 import 'package:adota_pets_mobile/view/pages/tela_detalhe_pet.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:adota_pets_mobile/view/widgets/card_pet.dart';
@@ -7,14 +9,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BodyFeed extends StatefulWidget {
-  final List<PetModelo> pets;
-  const BodyFeed({required this.pets});
+  const BodyFeed();
 
   @override
   State<BodyFeed> createState() => _FeedBodyState();
 }
 
 class _FeedBodyState extends State<BodyFeed> {
+  final PetService petService = PetService();
+  late Future<List<PetModelo>> PetsFuture;
+
   String _activeFilter = 'Todos';
   static final List<Filtros> _filters = [
     Filtros(label: 'Todos', icon: const FaIcon(FontAwesomeIcons.paw)),
@@ -22,12 +26,16 @@ class _FeedBodyState extends State<BodyFeed> {
     Filtros(label: 'Gatos', icon: const FaIcon(FontAwesomeIcons.cat)),
   ];
 
-  List<PetModelo> get _filtered {
-    if (_activeFilter == 'Todos') return widget.pets;
-    if (_activeFilter == 'Cães') {
-      return widget.pets.where((p) => p.type == 'Dog').toList();
-    }
-    return widget.pets.where((p) => p.type == 'Cat').toList();
+  void initState() {
+    super.initState();
+    PetsFuture = PetService().buscarPets();
+  }
+
+  List<PetModelo> _applyFilter(List<PetModelo> pets) {
+    if (_activeFilter == 'Todos') return pets;
+    if (_activeFilter == 'Cães')
+      return pets.where((p) => p.especie == 'Dog').toList();
+    return pets.where((p) => p.especie == 'Cat').toList();
   }
 
   @override
@@ -137,17 +145,86 @@ class _FeedBodyState extends State<BodyFeed> {
         const SizedBox(height: 20),
 
         // Cards
-        ..._filtered.map(
-          (pet) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: CardPet(
-              pet: pet,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => TelaDetalhePet(pet: pet)),
-              ),
-            ),
-          ),
+        FutureBuilder<List<PetModelo>>(
+          future: PetsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 48),
+                  child: CircularProgressIndicator(color: Color(0xFFE8622A)),
+                ),
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 48),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        size: 40,
+                        color: Color(0xFF888888),
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Erro ao carregar pets',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () => setState(() {
+                          PetsFuture = PetService().buscarPets();
+                        }),
+                        child: const Text(
+                          'Tentar novamente',
+                          style: TextStyle(color: Color(0xFFE8622A)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final pets = _applyFilter(snapshot.data ?? []);
+
+            if (pets.isEmpty) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 48),
+                  child: Text(
+                    'Nenhum pet encontrado',
+                    style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
+                  ),
+                ),
+              );
+            }
+
+            return Column(
+              children: pets
+                  .map(
+                    (pet) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CardPet(
+                        pet: pet,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => TelaDetalhePet(pet: pet),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            );
+          },
         ),
       ],
     );

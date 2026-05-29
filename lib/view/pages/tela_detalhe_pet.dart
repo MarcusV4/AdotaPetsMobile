@@ -1,4 +1,4 @@
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
@@ -15,13 +15,13 @@ class TelaDetalhePet extends StatelessWidget {
   const TelaDetalhePet({super.key, required this.pet});
 
   // Dados extras fixos por enquanto (podem virar campos do PetModel futuramente)
-  String get _species => pet.type == 'Dog' ? 'Cão' : 'Gato';
-  String get _size => pet.type == 'Dog' ? 'Grande' : 'Pequeno';
+  String get _species => pet.especie == 'Dog' ? 'Cão' : 'Gato';
+  String get _size => pet.especie == 'Dog' ? 'Grande' : 'Pequeno';
   String get _sex => 'Fêmea';
   String get _about =>
-      '${pet.name} é uma ${pet.breed} brincalhona e carinhosa que adora todo mundo que conhece. '
+      '${pet.nome} é uma ${pet.raca} brincalhona e carinhosa que adora todo mundo que conhece. '
       'Ela gosta de longas caminhadas no parque, jogar bola e se aconchegar no sofá. '
-      '${pet.name} se dá bem com crianças e outros cachorros, tornando-a a companheira familiar perfeita.';
+      '${pet.nome} se dá bem com crianças e outros cachorros, tornando-a a companheira familiar perfeita.';
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +136,7 @@ class TelaDetalhePet extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  pet.name,
+                                  pet.nome,
                                   style: const TextStyle(
                                     fontSize: 26,
                                     fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class TelaDetalhePet extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${pet.breed} • ${pet.age} • $_sex',
+                                  '${pet.raca} • ${pet.idade} • $_sex',
                                   style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.white70,
@@ -193,7 +193,7 @@ class TelaDetalhePet extends StatelessWidget {
                         CardInfo(label: 'Espécie', value: _species),
                         CardInfo(label: 'Porte', value: _size),
                         CardInfo(label: 'Sexo', value: _sex),
-                        CardInfo(label: 'Idade', value: pet.age),
+                        CardInfo(label: 'Idade', value: pet.idade),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -206,7 +206,7 @@ class TelaDetalhePet extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Sobre ${pet.name}',
+                                'Sobre ${pet.nome}',
                                 style: const TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
@@ -413,7 +413,7 @@ class TelaDetalhePet extends StatelessWidget {
                               }
                             : null,
                         icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                        label: Text('Adotar ${pet.name}'),
+                        label: Text('Adotar ${pet.nome}'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFE8622A),
                           disabledBackgroundColor: const Color(

@@ -1,8 +1,8 @@
-import 'package:adota_pets_mobile/view/modelo/chat_modelo.dart';
-import 'package:adota_pets_mobile/view/modelo/pet_modelo.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
+import 'package:adota_pets_mobile/modelo/conversa_modelo.dart';
+import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
 
-import '../modelo/conversa_modelo.dart';
+import 'package:flutter/cupertino.dart';
 
 class ConversasProvider extends ChangeNotifier {
   final List<Conversa> _conversas = [];
@@ -12,7 +12,7 @@ class ConversasProvider extends ChangeNotifier {
   // Abre ou retorna uma conversa existente para o pet
   Conversa openChat(PetModelo pet) {
     final existing = _conversas
-        .where((c) => c.pet.name == pet.name)
+        .where((c) => c.pet.nome == pet.nome)
         .firstOrNull;
     if (existing != null) return existing;
 
@@ -24,7 +24,7 @@ class ConversasProvider extends ChangeNotifier {
 
   void sendMessage(PetModelo pet, String text) {
     final conversa = _conversas
-        .where((c) => c.pet.name == pet.name)
+        .where((c) => c.pet.nome == pet.nome)
         .firstOrNull;
     if (conversa == null || text.trim().isEmpty) return;
 

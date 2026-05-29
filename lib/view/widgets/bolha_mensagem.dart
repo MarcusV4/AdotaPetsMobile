@@ -1,4 +1,4 @@
-import 'package:adota_pets_mobile/view/modelo/chat_modelo.dart';
+import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
