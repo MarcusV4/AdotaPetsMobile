@@ -1,4 +1,5 @@
 import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/services/pessoa_service.dart';
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
@@ -16,12 +17,6 @@ class TelaDetalhePet extends StatelessWidget {
 
   // Dados extras fixos por enquanto (podem virar campos do PetModel futuramente)
   String get _species => pet.especie == 'Dog' ? 'Cão' : 'Gato';
-  String get _size => pet.especie == 'Dog' ? 'Grande' : 'Pequeno';
-  String get _sex => 'Fêmea';
-  String get _about =>
-      '${pet.nome} é uma ${pet.raca} brincalhona e carinhosa que adora todo mundo que conhece. '
-      'Ela gosta de longas caminhadas no parque, jogar bola e se aconchegar no sofá. '
-      '${pet.nome} se dá bem com crianças e outros cachorros, tornando-a a companheira familiar perfeita.';
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +39,7 @@ class TelaDetalhePet extends StatelessWidget {
               ),
             ),
             title: const Text(
-              'PawFinder',
+              'AdotaPets',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -144,7 +139,7 @@ class TelaDetalhePet extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${pet.raca} • ${pet.idade} • $_sex',
+                                  '${pet.raca} • ${pet.idade} • ${PetModelo.formatarSexo(pet.sexo)}',
                                   style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.white70,
@@ -191,93 +186,104 @@ class TelaDetalhePet extends StatelessWidget {
                       childAspectRatio: 2.4,
                       children: [
                         CardInfo(label: 'Espécie', value: _species),
-                        CardInfo(label: 'Porte', value: _size),
-                        CardInfo(label: 'Sexo', value: _sex),
+                        CardInfo(
+                          label: 'Porte',
+                          value: PetModelo.formatarPorte(pet.porte),
+                        ),
+                        CardInfo(
+                          label: 'Sexo',
+                          value: PetModelo.formatarSexo(pet.sexo),
+                        ),
                         CardInfo(label: 'Idade', value: pet.idade),
                       ],
                     ),
                     const SizedBox(height: 16),
 
                     // Sobre
-                    CardSobre(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Sobre ${pet.nome}',
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1A1A1A),
+                    if (pet.descricao.isNotEmpty)
+                      CardSobre(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Sobre ${pet.nome}',
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 6),
-                              const Text('🐾', style: TextStyle(fontSize: 16)),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            _about,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF555555),
-                              height: 1.6,
+                                const SizedBox(width: 6),
+                                const Text(
+                                  '🐾',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 10),
+                            Text(
+                              pet.descricao,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF555555),
+                                height: 1.6,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                     const SizedBox(height: 12),
 
                     // Temperamento
-                    CardSobre(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Temperamento',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1A1A1A),
+                    if (pet.temperamento.isNotEmpty)
+                      CardSobre(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Temperamento',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1A1A1A),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: pet.tags
-                                .map(
-                                  (tag) => Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFF3EE),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: const Color(
-                                          0xFFE8622A,
-                                        ).withOpacity(0.3),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: pet.temperamento
+                                  .map(
+                                    (t) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFF3EE),
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: const Color(
+                                            0xFFE8622A,
+                                          ).withOpacity(0.3),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        PetModelo.formatarTemperamento(t),
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Color(0xFFE8622A),
+                                        ),
                                       ),
                                     ),
-                                    child: Text(
-                                      tag,
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Color(0xFFE8622A),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ],
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                     const SizedBox(height: 12),
 
                     // Saúde
@@ -294,23 +300,27 @@ class TelaDetalhePet extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          CardSaude(
-                            icon: Icons.shield_outlined,
-                            color: const Color(0xFF4CAF50),
-                            label: 'Vacinado',
-                          ),
-                          const SizedBox(height: 8),
-                          CardSaude(
-                            icon: Icons.content_cut,
-                            color: const Color(0xFF2196F3),
-                            label: 'Castrado',
-                          ),
-                          const SizedBox(height: 8),
-                          CardSaude(
-                            icon: Icons.location_on_outlined,
-                            color: const Color(0xFFE8622A),
-                            label: pet.location,
-                          ),
+                          if (pet.vacinado)
+                            const CardSaude(
+                              icon: Icons.shield_outlined,
+                              color: Color(0xFF4CAF50),
+                              label: 'Vacinado',
+                            ),
+                          if (pet.vacinado) const SizedBox(height: 8),
+                          if (pet.castrado)
+                            const CardSaude(
+                              icon: Icons.content_cut,
+                              color: Color(0xFF2196F3),
+                              label: 'Castrado',
+                            ),
+                          if (!pet.vacinado && !pet.castrado)
+                            const Text(
+                              'Sem informações de saúde',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF888888),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -329,59 +339,74 @@ class TelaDetalhePet extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Container(
-                                width: 44,
-                                height: 44,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFEAE4DD),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'M',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF888888),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          FutureBuilder(
+                            future: PessoaService().buscarPorId(pet.donoId),
+                            builder: (context, snapshot) {
+                              final nome =
+                                  snapshot.data?.nome ?? 'Carregando...';
+                              final email = snapshot.data?.email ?? '';
+                              final inicial = nome.isNotEmpty
+                                  ? nome[0].toUpperCase()
+                                  : '?';
+
+                              return Row(
                                 children: [
-                                  Text(
-                                    'Abrigo / Tutor',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF1A1A1A),
+                                  Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFEAE4DD),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.email_outlined,
-                                        size: 12,
-                                        color: Color(0xFF888888),
-                                      ),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        'mvc7730@gmail.com',
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                    child: Center(
+                                      child: Text(
+                                        inicial,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
                                           color: Color(0xFF888888),
                                         ),
                                       ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        nome,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
+                                      ),
+                                      if (email.isNotEmpty) ...[
+                                        const SizedBox(height: 2),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.email_outlined,
+                                              size: 12,
+                                              color: Color(0xFF888888),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              email,
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFF888888),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ],
                                   ),
                                 ],
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ],
                       ),

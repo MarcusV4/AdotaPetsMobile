@@ -1,4 +1,5 @@
 import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/services/pessoa_service.dart';
 
 import 'package:adota_pets_mobile/view/pages/chat_vazio.dart';
 import 'package:adota_pets_mobile/view/widgets/bolha_mensagem.dart';
@@ -105,9 +106,18 @@ class _ChatScreenState extends State<TelaChat> {
                       color: Color(0xFF1A1A1A),
                     ),
                   ),
-                  const Text(
-                    'Chat com MarcusVC',
-                    style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+                  FutureBuilder(
+                    future: PessoaService().buscarPorId(widget.pet.donoId),
+                    builder: (context, snapshot) {
+                      final nome = snapshot.data?.nome ?? '...';
+                      return Text(
+                        'Chat com $nome',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF888888),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

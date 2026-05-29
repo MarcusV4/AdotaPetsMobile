@@ -87,10 +87,12 @@ class CardPet extends StatelessWidget {
                             color: Colors.white,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            Icons.favorite_border,
+                          child: Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border,
                             size: 18,
-                            color: Color(0xFF888888),
+                            color: isFav
+                                ? const Color(0xFFE8622A)
+                                : const Color(0xFF888888),
                           ),
                         ),
                       ),
@@ -125,39 +127,60 @@ class CardPet extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on_outlined,
-                            size: 14,
-                            color: Color(0xFF888888),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            pet.location,
-                            style: const TextStyle(
-                              fontSize: 12,
+                      if (pet.location.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on_outlined,
+                              size: 14,
                               color: Color(0xFF888888),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 6,
-                        children: pet.tags
-                            .map(
-                              (tag) => Text(
-                                tag,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFFE8622A),
-                                ),
+                            const SizedBox(width: 4),
+                            Text(
+                              pet.location,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF888888),
                               ),
-                            )
-                            .toList(),
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
+
+                      if (pet.temperamento.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: pet.temperamento
+                              .map(
+                                (t) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFF3EE),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: const Color(
+                                        0xFFE8622A,
+                                      ).withOpacity(0.3),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    PetModelo.formatarTemperamento(t),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFE8622A),
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ],
                   ),
                 ),
