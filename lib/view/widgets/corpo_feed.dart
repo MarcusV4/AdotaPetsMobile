@@ -20,6 +20,9 @@ class _FeedBodyState extends State<BodyFeed> {
   late Future<List<PetModelo>> PetsFuture;
 
   String _activeFilter = 'Todos';
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
+
   static final List<Filtros> _filters = [
     Filtros(label: 'Todos', icon: const FaIcon(FontAwesomeIcons.paw)),
     Filtros(label: 'Cães', icon: const FaIcon(FontAwesomeIcons.dog)),
@@ -31,11 +34,37 @@ class _FeedBodyState extends State<BodyFeed> {
     PetsFuture = PetService().buscarPets();
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   List<PetModelo> _applyFilter(List<PetModelo> pets) {
-    if (_activeFilter == 'Todos') return pets;
+    var resultado = pets;
+
     if (_activeFilter == 'Cães')
-      return pets.where((p) => p.especie == 'Dog').toList();
-    return pets.where((p) => p.especie == 'Cat').toList();
+      resultado = resultado.where((p) => p.especie == 'Dog').toList();
+    if (_activeFilter == 'Gatos')
+      resultado = resultado.where((p) => p.especie == 'Cat').toList();
+
+    final query = _searchQuery.toLowerCase().trim();
+
+    if (query.isEmpty) return resultado;
+
+    return resultado.where((p) {
+      final nomeMatch = p.nome.toLowerCase().contains(query);
+
+      final racaMatch = p.raca.toLowerCase().contains(query);
+
+      final temperamentoMatch = p.temperamento.any(
+        (t) =>
+            t.toLowerCase().contains(query) ||
+            PetModelo.formatarTemperamento(t).toLowerCase().contains(query),
+      );
+
+      return nomeMatch || racaMatch || temperamentoMatch;
+    }).toList();
   }
 
   @override
@@ -74,16 +103,31 @@ class _FeedBodyState extends State<BodyFeed> {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: const Color(0xFFE0D9D1)),
           ),
-          child: const TextField(
+          child: TextField(
+            controller: _searchController,
+            onChanged: (v) => setState(() => _searchQuery = v),
             style: TextStyle(fontSize: 14),
             decoration: InputDecoration(
-              hintText: 'Buscar por nome, raça ou localização...',
+              hintText: 'Buscar por nome, raça ou temperamento...',
               hintStyle: TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
               prefixIcon: Icon(
                 Icons.search,
                 color: Color(0xFFBBB3AA),
                 size: 20,
               ),
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        size: 18,
+                        color: Color(0xFF888888),
+                      ),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() => _searchQuery = '');
+                      },
+                    )
+                  : null,
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(vertical: 14),
             ),
@@ -195,12 +239,28 @@ class _FeedBodyState extends State<BodyFeed> {
             final pets = _applyFilter(snapshot.data ?? []);
 
             if (pets.isEmpty) {
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 48),
-                  child: Text(
-                    'Nenhum pet encontrado',
-                    style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
+                  padding: const EdgeInsets.symmetric(vertical: 48),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.search_off,
+                        size: 40,
+                        color: Color(0xFF888888),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _searchQuery.isNotEmpty
+                            ? 'Nenhum pet encontrado para "$_searchQuery"'
+                            : 'Nenhum pet encontrado',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF888888),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
