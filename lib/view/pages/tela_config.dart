@@ -32,7 +32,7 @@ class _ConfiguracoesScreenState extends State<TelaConfig> {
           ),
         ),
         title: const Text(
-          'PawFinder',
+          'AdotaPets',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,

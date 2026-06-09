@@ -25,8 +25,12 @@ class TelaFavoritos extends StatelessWidget {
           ),
         ),
         title: const Text(
-          'PawFinder',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A)),
+          'AdotaPets',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1A1A1A),
+          ),
         ),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(1),

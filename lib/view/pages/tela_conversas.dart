@@ -28,7 +28,7 @@ class TelaConversas extends StatelessWidget {
           ),
         ),
         title: const Text(
-          'PawFinder',
+          'AdotaPets',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,

@@ -68,7 +68,7 @@ class DrawerApp extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'PawFinder',
+                        'AdotaPets',
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
