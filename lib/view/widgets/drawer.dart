@@ -3,7 +3,7 @@ import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-enum DrawerItem { feed, favoritos, conversas, perfil, configuracoes }
+enum DrawerItem { feed, favoritos, meusPets, conversas, perfil, configuracoes }
 
 class DrawerApp extends StatelessWidget {
   final DrawerItem activeItem;
@@ -26,6 +26,8 @@ class DrawerApp extends StatelessWidget {
         return '/feed';
       case DrawerItem.favoritos:
         return '/favoritos';
+      case DrawerItem.meusPets:
+        return '/meusPets';
       case DrawerItem.configuracoes:
         return '/config';
       case DrawerItem.perfil:
@@ -111,6 +113,12 @@ class DrawerApp extends StatelessWidget {
               label: 'Favoritos',
               isActive: activeItem == DrawerItem.favoritos,
               onTap: () => _navigate(context, DrawerItem.favoritos),
+            ),
+            _DrawerItem(
+              icon: Icons.pets, // ADICIONADO
+              label: 'Meus Pets',
+              isActive: activeItem == DrawerItem.meusPets,
+              onTap: () => _navigate(context, DrawerItem.meusPets),
             ),
             _DrawerItem(
               icon: Icons.chat_bubble_outline,

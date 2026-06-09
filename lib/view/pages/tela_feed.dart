@@ -1,4 +1,5 @@
 import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/view/widgets/botao_flutuante.dart';
 
 import 'package:adota_pets_mobile/view/widgets/corpo_feed.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
@@ -36,6 +37,7 @@ class TelaFeed extends StatelessWidget {
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.feed),
+      floatingActionButton: const BotaoFlutuante(),
       body: const BodyFeed(),
     );
   }

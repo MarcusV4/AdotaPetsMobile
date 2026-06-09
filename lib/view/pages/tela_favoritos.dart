@@ -1,5 +1,6 @@
 import 'package:adota_pets_mobile/view/pages/favoritos_vazia.dart';
 import 'package:adota_pets_mobile/view/pages/lista_favoritos.dart';
+import 'package:adota_pets_mobile/view/widgets/botao_flutuante.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class TelaFavoritos extends StatelessWidget {
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.favoritos),
+      floatingActionButton: const BotaoFlutuante(),
       body: Consumer<FavoritesProvider>(
         builder: (context, favs, _) {
           if (favs.favorites.isEmpty) {

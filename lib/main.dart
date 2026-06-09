@@ -4,6 +4,7 @@ import 'package:adota_pets_mobile/view/pages/tela_conversas.dart';
 import 'package:adota_pets_mobile/view/pages/tela_favoritos.dart';
 import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
+import 'package:adota_pets_mobile/view/pages/tela_meus_pets.dart';
 import 'package:adota_pets_mobile/view/pages/tela_perfil.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/feed': (_) => const TelaFeed(),
         '/favoritos': (_) => const TelaFavoritos(),
+        '/meusPets': (_) => const TelaMeusPets(),
         '/config': (_) => const TelaConfig(),
         '/perfil': (_) => const TelaPerfil(),
         '/conversas': (_) => const TelaConversas(),

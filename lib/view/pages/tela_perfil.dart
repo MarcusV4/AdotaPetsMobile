@@ -1,3 +1,4 @@
+import 'package:adota_pets_mobile/view/widgets/botao_flutuante.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class TelaPerfil extends StatelessWidget {
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.perfil),
+      floatingActionButton: const BotaoFlutuante(),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         children: [

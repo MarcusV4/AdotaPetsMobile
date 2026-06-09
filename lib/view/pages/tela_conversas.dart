@@ -1,4 +1,5 @@
 import 'package:adota_pets_mobile/view/pages/conversas_vazia.dart';
+import 'package:adota_pets_mobile/view/widgets/botao_flutuante.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/lista_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
@@ -41,6 +42,7 @@ class TelaConversas extends StatelessWidget {
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.conversas),
+      floatingActionButton: const BotaoFlutuante(),
       body: conversas.isEmpty
           ? const ConversasVazia()
           : ListaConversas(conversas: conversas),
