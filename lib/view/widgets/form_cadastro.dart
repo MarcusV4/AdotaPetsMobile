@@ -335,13 +335,11 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                   const SizedBox(height: 4),
                   _SwitchTile(
                     label: 'Vacinado',
-                    subtitle: 'Pet está com vacinas em dia',
                     value: _vacinado,
                     onChanged: (v) => setState(() => _vacinado = v),
                   ),
                   _SwitchTile(
                     label: 'Castrado',
-                    subtitle: 'Pet foi castrado/esterilizado',
                     value: _castrado,
                     onChanged: (v) => setState(() => _castrado = v),
                   ),
@@ -536,13 +534,11 @@ class _Dropdown extends StatelessWidget {
 
 class _SwitchTile extends StatelessWidget {
   final String label;
-  final String subtitle;
   final bool value;
   final ValueChanged<bool> onChanged;
 
   const _SwitchTile({
     required this.label,
-    required this.subtitle,
     required this.value,
     required this.onChanged,
   });
@@ -562,10 +558,6 @@ class _SwitchTile extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF1A1A1A),
                 ),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Color(0xFF888888)),
               ),
             ],
           ),
