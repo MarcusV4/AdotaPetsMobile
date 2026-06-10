@@ -1,5 +1,9 @@
-import 'package:flutter/cupertino.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FormCadastro extends StatefulWidget {
   const FormCadastro({super.key});
@@ -20,10 +24,15 @@ class _CadastrarPetModalState extends State<FormCadastro> {
   String? _porte;
   bool _vacinado = false;
   bool _castrado = false;
+  bool _enviando = false;
   final Set<String> _temperamentos = {};
 
+  Uint8List? _imagemBytes; // bytes para exibir preview
+  String? _imagemNome; // nome original do arquivo
+  String? _imagemMime; // ex: "image/jpeg"
+
   static const _temperamentosOpcoes = [
-    'BRINCALHONA',
+    'BRINCALHAO',
     'CALMO',
     'CARINHOSO',
     'CURIOSO',
@@ -38,7 +47,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
   ];
 
   static const _temperamentosLabels = {
-    'BRINCALHONA': 'Brincalhão',
+    'BRINCALHAO': 'Brincalhão',
     'CALMO': 'Calmo',
     'CARINHOSO': 'Carinhoso',
     'CURIOSO': 'Curioso',
@@ -60,6 +69,120 @@ class _CadastrarPetModalState extends State<FormCadastro> {
     _localizacaoController.dispose();
     _descricaoController.dispose();
     super.dispose();
+  }
+
+  void _selecionarImagem() {
+    final input = html.FileUploadInputElement()
+      ..accept = 'image/*'; // só aceita imagens
+    input.click();
+
+    input.onChange.listen((event) {
+      final arquivo = input.files?.first;
+      if (arquivo == null) return;
+
+      final reader = html.FileReader();
+      reader.readAsArrayBuffer(arquivo);
+
+      reader.onLoadEnd.listen((_) {
+        setState(() {
+          _imagemBytes = reader.result as Uint8List;
+          _imagemNome = arquivo.name;
+          _imagemMime = arquivo.type;
+        });
+      });
+    });
+  }
+
+  Future<void> _cadastrar() async {
+    // Validação básica
+    if (_nomeController.text.trim().isEmpty ||
+        _especie == null ||
+        _sexo == null ||
+        _idadeController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Preencha os campos obrigatórios (*)'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _enviando = true);
+
+    try {
+      // TODO: substitua pelo id do usuário logado
+      const donoId = 'd0cee2d8-4087-4dae-8bc5-60a615e1c861';
+      final url = Uri.parse(
+        'http://192.168.18.26:8080/api/pets/cadastrar/$donoId',
+      );
+
+      final request = http.MultipartRequest('POST', url);
+
+      // Parte "dados" — JSON do pet como string
+      final dados = jsonEncode({
+        'nome': _nomeController.text.trim(),
+        'idade': int.tryParse(_idadeController.text.trim()) ?? 0,
+        'especie': _especie,
+        'sexo': _sexo,
+        'descricao': _descricaoController.text.trim(),
+        'vacinado': _vacinado,
+        'castrado': _castrado,
+        'temperamento': _temperamentos.toList(),
+        'porte': _porte,
+        'raca': _racaController.text.trim(),
+      });
+
+      request.files.add(
+        http.MultipartFile.fromString(
+          'dados',
+          dados,
+          contentType: http.MediaType('application', 'json'),
+        ),
+      );
+
+      // Parte "imagem" — só adiciona se o usuário selecionou uma foto
+      if (_imagemBytes != null) {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'imagem',
+            _imagemBytes!,
+            filename: _imagemNome ?? 'foto.jpg',
+            contentType: http.MediaType.parse(_imagemMime ?? 'image/jpeg'),
+          ),
+        );
+      }
+
+      print(request.fields);
+      print(request.files.length);
+
+      final response = await request.send();
+
+      if (response.statusCode == 202) {
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Pet cadastrado com sucesso! 🐾'),
+              backgroundColor: Color(0xFFE8622A),
+            ),
+          );
+        }
+      } else {
+        throw Exception('Erro ${response.statusCode}');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao cadastrar: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _enviando = false);
+    }
   }
 
   @override
@@ -128,7 +251,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                   const _Label('Foto do Pet'),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () {}, // TODO: image picker
+                    onTap: _selecionarImagem, // TODO: image picker
                     child: Container(
                       height: 120,
                       width: double.infinity,
@@ -137,27 +260,66 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: const Color(0xFFE0D9D1),
-                          style: BorderStyle.solid,
+                          // style: BorderStyle.solid,
                         ),
                       ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.upload_outlined,
-                            size: 28,
-                            color: Color(0xFF888888),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Clique para enviar uma foto',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF888888),
+                      clipBehavior: Clip.hardEdge,
+                      child: _imagemBytes != null
+                          ? Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                Image.memory(_imagemBytes!, fit: BoxFit.cover),
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.edit,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          'Trocar',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.upload_outlined,
+                                  size: 28,
+                                  color: Color(0xFF888888),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Clique para enviar uma foto',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFF888888),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -395,29 +557,41 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: _cadastrar,
+                      onPressed: _enviando ? null : _cadastrar,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFE8622A),
+                        disabledBackgroundColor: const Color(
+                          0xFFE8622A,
+                        ).withOpacity(0.5),
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Cadastrar Pet',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                      child: _enviando
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Cadastrar Pet',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text('🐾', style: TextStyle(fontSize: 16)),
+                              ],
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Text('🐾', style: TextStyle(fontSize: 16)),
-                        ],
-                      ),
                     ),
                   ),
                 ],
@@ -427,11 +601,6 @@ class _CadastrarPetModalState extends State<FormCadastro> {
         ],
       ),
     );
-  }
-
-  void _cadastrar() {
-    // TODO: chamar PetService.cadastrarPet() com os dados do form
-    Navigator.pop(context);
   }
 }
 
