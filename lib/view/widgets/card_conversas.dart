@@ -32,7 +32,7 @@ class CardConversas extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                pet.imageUrl,
+                pet.imagemUrl,
                 width: 64,
                 height: 64,
                 fit: BoxFit.cover,

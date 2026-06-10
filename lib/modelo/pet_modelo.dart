@@ -12,7 +12,7 @@ class PetModelo {
   final String porte;
   final String donoId;
   final String location;
-  final String imageUrl;
+  final String imagemUrl;
 
   const PetModelo({
     required this.id,
@@ -28,7 +28,7 @@ class PetModelo {
     required this.porte,
     required this.donoId,
     this.location = '',
-    this.imageUrl = '',
+    this.imagemUrl = '',
   });
 
   factory PetModelo.fromJson(Map<String, dynamic> json) {
@@ -47,6 +47,7 @@ class PetModelo {
           .toList(),
       porte: json['porte'] as String? ?? '',
       donoId: json['donoID'] as String,
+      imagemUrl: json['imagemUrl'] ?? '',
     );
   }
 

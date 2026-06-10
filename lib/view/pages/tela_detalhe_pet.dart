@@ -87,7 +87,7 @@ class TelaDetalhePet extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            pet.imageUrl,
+                            pet.imagemUrl,
                             height: 220,
                             width: double.infinity,
                             fit: BoxFit.cover,

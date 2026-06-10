@@ -78,7 +78,7 @@ class _ChatScreenState extends State<TelaChat> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  widget.pet.imageUrl,
+                  widget.pet.imagemUrl,
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,

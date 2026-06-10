@@ -40,7 +40,7 @@ class CardPet extends StatelessWidget {
                         top: Radius.circular(16),
                       ),
                       child: Image.network(
-                        pet.imageUrl,
+                        pet.imagemUrl,
                         height: 200,
                         width: double.infinity,
                         fit: BoxFit.cover,
