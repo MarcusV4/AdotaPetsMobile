@@ -6,6 +6,7 @@ import 'package:adota_pets_mobile/view/pages/tela_feed.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
 import 'package:adota_pets_mobile/view/pages/tela_meus_pets.dart';
 import 'package:adota_pets_mobile/view/pages/tela_perfil.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
         ChangeNotifierProvider(create: (_) => ConversasProvider()),
       ],
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: TelaLogin(),
       routes: {
+        '/login': (_) => const TelaLogin(),
         '/feed': (_) => const TelaFeed(),
         '/favoritos': (_) => const TelaFavoritos(),
         '/meusPets': (_) => const TelaMeusPets(),

@@ -42,6 +42,10 @@ class TelaFavoritos extends StatelessWidget {
       floatingActionButton: const BotaoFlutuante(),
       body: Consumer<FavoritesProvider>(
         builder: (context, favs, _) {
+          final petsDisponiveis = favs.favorites
+              .where((pet) => pet.disponivelParaAdocao)
+              .toList();
+
           if (favs.favorites.isEmpty) {
             return const FavoritosVazia();
           }

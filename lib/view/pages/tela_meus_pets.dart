@@ -1,10 +1,32 @@
+import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/services/pet_service.dart';
+import 'package:adota_pets_mobile/view/pages/tela_detalhe_pet.dart';
 import 'package:adota_pets_mobile/view/widgets/botao_flutuante.dart';
+import 'package:adota_pets_mobile/view/widgets/card_pet.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TelaMeusPets extends StatelessWidget {
+class TelaMeusPets extends StatefulWidget {
   const TelaMeusPets({super.key});
+
+  @override
+  State<TelaMeusPets> createState() => _TelaMeusPetsState();
+}
+
+class _TelaMeusPetsState extends State<TelaMeusPets> {
+  late Future<List<PetModelo>> _petsFuture;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final usuarioId = context.read<AuthProvider>().usuarioId;
+    print(usuarioId);
+
+    _petsFuture = PetService().buscarMeusPets(usuarioId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +43,7 @@ class TelaMeusPets extends StatelessWidget {
           ),
         ),
         title: const Text(
-          'PawFinder',
+          'AdotaPets',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -67,7 +89,84 @@ class TelaMeusPets extends StatelessWidget {
               'Pets que você cadastrou para adoção',
               style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
             ),
-            const Expanded(child: _EmptyState()),
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: FutureBuilder<List<PetModelo>>(
+                future: _petsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFE8622A),
+                      ),
+                    );
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 40,
+                            color: Color(0xFF888888),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text('Erro ao carregar seus pets'),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                final usuarioId = context
+                                    .read<AuthProvider>()
+                                    .usuarioId;
+
+                                _petsFuture = PetService().buscarMeusPets(
+                                  usuarioId,
+                                );
+                              });
+                            },
+                            child: const Text(
+                              'Tentar novamente',
+                              style: TextStyle(color: Color(0xFFE8622A)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  final pets = snapshot.data ?? [];
+
+                  if (pets.isEmpty) {
+                    return const _EmptyState();
+                  }
+
+                  return ListView.builder(
+                    itemCount: pets.length,
+                    itemBuilder: (context, index) {
+                      final pet = pets[index];
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: CardPet(
+                          pet: pet,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => TelaDetalhePet(pet: pet),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

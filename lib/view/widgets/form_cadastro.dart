@@ -1,9 +1,12 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:typed_data';
+import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class FormCadastro extends StatefulWidget {
   const FormCadastro({super.key});
@@ -94,6 +97,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
   }
 
   Future<void> _cadastrar() async {
+    final donoId = context.read<AuthProvider>().usuarioId;
     // Validação básica
     if (_nomeController.text.trim().isEmpty ||
         _especie == null ||
@@ -112,7 +116,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
 
     try {
       // TODO: substitua pelo id do usuário logado
-      const donoId = 'd0cee2d8-4087-4dae-8bc5-60a615e1c861';
+      final donoId = context.read<AuthProvider>().usuarioId;
       final url = Uri.parse(
         'http://192.168.18.26:8080/api/pets/cadastrar/$donoId',
       );

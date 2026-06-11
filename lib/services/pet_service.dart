@@ -17,6 +17,30 @@ class PetService {
     }
   }
 
+  Future<List<PetModelo>> buscarMeusPets(String donoId) async {
+    final response = await http.get(
+      Uri.parse('http://192.168.18.26:8080/api/pessoas/$donoId'),
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+
+      final List petsJson = json['pet'] ?? [];
+
+      return petsJson.map((pet) => PetModelo.fromJson(pet)).toList();
+    }
+
+    throw Exception('Erro ao carregar meus pets');
+  }
+
+  Future<void> alterarDisponibilidade(String petId) async {
+    final response = await http.put(Uri.parse('$urlBase/pets/adocao/$petId'));
+
+    if (response.statusCode != 200) {
+      throw Exception('Erro ao alterar disponibilidade');
+    }
+  }
+
   Future<List<PetModelo>> buscarPetsPorEspecie(String especie) async {
     final response = await http.get(
       Uri.parse('$urlBase/pets/especie/$especie'),

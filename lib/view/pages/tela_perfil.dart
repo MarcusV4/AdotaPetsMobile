@@ -1,9 +1,11 @@
+import 'package:adota_pets_mobile/modelo/usuario_logado.dart';
 import 'package:adota_pets_mobile/view/widgets/botao_flutuante.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/provider_auth.dart';
 import '../widgets/provider_favoritos.dart';
 
 class TelaPerfil extends StatelessWidget {
@@ -12,6 +14,13 @@ class TelaPerfil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favCount = context.watch<FavoritesProvider>().favorites.length;
+    final auth = context.watch<AuthProvider>(); // ADICIONADO
+    final nome = auth.usuarioNome;
+    final email = auth.usuarioEmail;
+    final inicial = nome.isNotEmpty ? nome[0].toUpperCase() : '?';
+    print(auth.usuarioNome);
+    print(auth.usuarioEmail);
+    print(auth.usuarioId);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F0EB),
@@ -88,9 +97,9 @@ class TelaPerfil extends StatelessWidget {
                             color: const Color(0xFFE8622A),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              '?',
+                              inicial,
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -104,8 +113,8 @@ class TelaPerfil extends StatelessWidget {
                       // Compensa o espaço do translate
                       const SizedBox(height: 0),
 
-                      const Text(
-                        'User',
+                      Text(
+                        nome,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -113,12 +122,20 @@ class TelaPerfil extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Row(
+                      Row(
                         children: [
                           Icon(
                             Icons.email_outlined,
                             size: 14,
                             color: Color(0xFF888888),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            email,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF888888),
+                            ),
                           ),
                         ],
                       ),
@@ -194,8 +211,10 @@ class TelaPerfil extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton.icon(
-                          onPressed: () =>
-                              Navigator.pushReplacementNamed(context, '/login'),
+                          onPressed: () {
+                            context.read<AuthProvider>().sair();
+                            Navigator.pushReplacementNamed(context, '/login');
+                          },
                           icon: const Icon(
                             Icons.logout_outlined,
                             size: 18,

@@ -1,5 +1,6 @@
 import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
 import 'package:adota_pets_mobile/services/pessoa_service.dart';
+import 'package:adota_pets_mobile/services/pet_service.dart';
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/provider_auth.dart';
 import '../widgets/provider_favoritos.dart';
 
 class TelaDetalhePet extends StatelessWidget {
@@ -20,6 +22,9 @@ class TelaDetalhePet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final usuarioId = context.read<AuthProvider>().usuarioId;
+    final meuPet = pet.donoId == usuarioId;
+
     return Consumer<FavoritesProvider>(
       builder: (context, favs, _) {
         final isFav = favs.isFavorite(pet);
@@ -426,19 +431,54 @@ class TelaDetalhePet extends StatelessWidget {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton.icon(
-                        onPressed: isFav
-                            ? () {
-                                context.read<ConversasProvider>().openChat(pet);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => TelaChat(pet: pet),
-                                  ),
-                                );
+                        onPressed: meuPet
+                            ? () async {
+                                try {
+                                  await PetService().alterarDisponibilidade(
+                                    pet.id,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        pet.disponivelParaAdocao
+                                            ? 'Pet retirado da adoção'
+                                            : 'Pet colocado para adoção',
+                                      ),
+                                    ),
+                                  );
+
+                                  Navigator.pop(context);
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(e.toString())),
+                                  );
+                                }
                               }
-                            : null,
+                            : (isFav
+                                  ? () {
+                                      context
+                                          .read<ConversasProvider>()
+                                          .openChat(pet);
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => TelaChat(pet: pet),
+                                        ),
+                                      );
+                                    }
+                                  : null),
                         icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                        label: Text('Adotar ${pet.nome}'),
+                        label: Text(
+                          meuPet
+                              ? (pet.disponivelParaAdocao
+                                    ? 'Retirar da adoção'
+                                    : 'Colocar para adoção')
+                              : 'Adotar ${pet.nome}',
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFE8622A),
                           disabledBackgroundColor: const Color(
@@ -454,30 +494,31 @@ class TelaDetalhePet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          isFav ? Icons.favorite : Icons.favorite_border,
-                          size: 14,
-                          color: isFav
-                              ? const Color(0xFFE8622A)
-                              : const Color(0xFF888888),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          isFav
-                              ? 'Pet favoritado! Botão de adoção liberado.'
-                              : 'Favorite este pet para iniciar o chat',
-                          style: TextStyle(
-                            fontSize: 12,
+                    if (!meuPet)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border,
+                            size: 14,
                             color: isFav
                                 ? const Color(0xFFE8622A)
                                 : const Color(0xFF888888),
                           ),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(width: 4),
+                          Text(
+                            isFav
+                                ? 'Pet favoritado! Botão de adoção liberado.'
+                                : 'Favorite este pet para iniciar o chat',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isFav
+                                  ? const Color(0xFFE8622A)
+                                  : const Color(0xFF888888),
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
