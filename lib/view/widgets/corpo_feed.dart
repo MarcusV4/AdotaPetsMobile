@@ -7,6 +7,7 @@ import 'package:adota_pets_mobile/view/widgets/card_pet.dart';
 import 'package:adota_pets_mobile/view/widgets/filtro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class BodyFeed extends StatefulWidget {
   const BodyFeed();
@@ -25,8 +26,12 @@ class _FeedBodyState extends State<BodyFeed> {
 
   static final List<Filtros> _filters = [
     Filtros(label: 'Todos', icon: const FaIcon(FontAwesomeIcons.paw)),
-    Filtros(label: 'Cães', icon: const FaIcon(FontAwesomeIcons.dog)),
-    Filtros(label: 'Gatos', icon: const FaIcon(FontAwesomeIcons.cat)),
+    Filtros(label: 'Cães', icon: const Text('🐕')),
+    Filtros(label: 'Gatos', icon: const Text('🐈')),
+    Filtros(label: 'Aves', icon: const Text('🦜')),
+    Filtros(label: 'Peixes', icon: const Text('🐟')),
+    Filtros(label: 'Roedores', icon: const Text('🐹')),
+    Filtros(label: 'Répteis', icon: const Text('🦎')),
   ];
 
   void initState() {
@@ -44,9 +49,17 @@ class _FeedBodyState extends State<BodyFeed> {
     var resultado = pets;
 
     if (_activeFilter == 'Cães')
-      resultado = resultado.where((p) => p.especie == 'Dog').toList();
+      resultado = resultado.where((p) => p.especie == 'Cachorro').toList();
     if (_activeFilter == 'Gatos')
-      resultado = resultado.where((p) => p.especie == 'Cat').toList();
+      resultado = resultado.where((p) => p.especie == 'Gato').toList();
+    if (_activeFilter == 'Aves')
+      resultado = resultado.where((p) => p.especie == 'Ave').toList();
+    if (_activeFilter == 'Peixes')
+      resultado = resultado.where((p) => p.especie == 'Peixe').toList();
+    if (_activeFilter == 'Roedores')
+      resultado = resultado.where((p) => p.especie == 'Roedor').toList();
+    if (_activeFilter == 'Répteis')
+      resultado = resultado.where((p) => p.especie == 'Réptil').toList();
 
     final query = _searchQuery.toLowerCase().trim();
 
@@ -136,55 +149,60 @@ class _FeedBodyState extends State<BodyFeed> {
         const SizedBox(height: 16),
 
         // Filtros
-        Row(
-          children: _filters.map((f) {
-            final isActive = _activeFilter == f.label;
-            return Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: GestureDetector(
-                onTap: () => setState(() => _activeFilter = f.label),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isActive ? const Color(0xFFE8622A) : Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: isActive
-                          ? const Color(0xFFE8622A)
-                          : const Color(0xFFE0D9D1),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: _filters.map((f) {
+              final isActive = _activeFilter == f.label;
+
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: GestureDetector(
+                  onTap: () => setState(() => _activeFilter = f.label),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isActive ? const Color(0xFFE8622A) : Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: isActive
+                            ? const Color(0xFFE8622A)
+                            : const Color(0xFFE0D9D1),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconTheme(
+                          data: IconThemeData(
+                            color: isActive
+                                ? Colors.white
+                                : const Color(0xFF888888),
+                            size: 14,
+                          ),
+                          child: f.icon,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          f.label,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: isActive
+                                ? Colors.white
+                                : const Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      IconTheme(
-                        data: IconThemeData(
-                          color: isActive
-                              ? Colors.white
-                              : const Color(0xFF888888),
-                          size: 14,
-                        ),
-                        child: f.icon,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        f.label,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: isActive
-                              ? Colors.white
-                              : const Color(0xFF1A1A1A),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
         const SizedBox(height: 20),
 

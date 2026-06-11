@@ -1,25 +1,38 @@
-import 'package:adota_pets_mobile/modelo/conversa_modelo.dart';
+// lib/view/widgets/card_conversas.dart
 
+import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_mensagem.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/chat_service.dart';
 
 class CardConversas extends StatelessWidget {
-  final Conversa conversa;
-  const CardConversas({required this.conversa});
+  final ChatModelo conversa;
+
+  const CardConversas({super.key, required this.conversa});
 
   @override
   Widget build(BuildContext context) {
-    final pet = conversa.pet;
-    final lastMsg = conversa.messages.isNotEmpty
-        ? conversa.messages.last
-        : null;
+    final auth = context.read<AuthProvider>();
+    final meuId = auth.usuarioId;
+    final nomeOutro = conversa.nomeOutraPessoa(meuId);
+    final nomePet = conversa.pet?.nome ?? '';
+    final fotoPet = conversa.pet?.foto;
+    final inicial = nomeOutro.isNotEmpty ? nomeOutro[0].toUpperCase() : '?';
 
     return GestureDetector(
-      // ADICIONADO: tap no card abre o chat do pet
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => TelaChat(pet: pet)),
+        MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+            create: (_) => MensagensProvider(),
+            child: TelaChat(chat: conversa),
+          ),
+        ),
       ),
       child: Container(
         padding: const EdgeInsets.all(14),
@@ -31,18 +44,15 @@ class CardConversas extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                pet.imagemUrl,
-                width: 64,
-                height: 64,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 64,
-                  height: 64,
-                  color: const Color(0xFFEAE4DD),
-                  child: const Icon(Icons.pets, color: Color(0xFFBBB3AA)),
-                ),
-              ),
+              child: fotoPet != null
+                  ? Image.network(
+                      fotoPet,
+                      width: 64,
+                      height: 64,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => _avatarFallback(inicial),
+                    )
+                  : _avatarFallback(inicial),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -50,7 +60,7 @@ class CardConversas extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pet.nome,
+                    nomeOutro,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -58,45 +68,62 @@ class CardConversas extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 2),
-                  // ADICIONADO: mostra última mensagem ou nome do dono
-                  Text(
-                    lastMsg != null ? lastMsg.text : 'mvc7731',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF888888),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF3EE),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: const Color(0xFFE8622A).withOpacity(0.3),
-                      ),
-                    ),
-                    child: const Text(
-                      'Dono',
-                      style: TextStyle(fontSize: 11, color: Color(0xFFE8622A)),
-                    ),
+                  FutureBuilder(
+                    future: ChatApiService(
+                      token: auth.token,
+                    ).listarMensagens(conversa.idChat),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text(
+                          conversa.pet?.nome != null
+                              ? 'Sobre: ${conversa.pet!.nome}'
+                              : 'Nenhuma mensagem ainda',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF888888),
+                          ),
+                        );
+                      }
+
+                      final ultima = snapshot.data!.last;
+                      final ehMinha = ultima.remetenteId == meuId;
+                      final prefixo = ehMinha ? 'Você: ' : '';
+
+                      return Text(
+                        '$prefixo${ultima.conteudo}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF888888),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
-            // ADICIONADO: horário da última mensagem
-            Text(
-              lastMsg != null
-                  ? '${lastMsg.time.hour.toString().padLeft(2, '0')}:${lastMsg.time.minute.toString().padLeft(2, '0')}'
-                  : 'agora',
-              style: const TextStyle(fontSize: 11, color: Color(0xFF888888)),
-            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _avatarFallback(String inicial) {
+    return Container(
+      width: 64,
+      height: 64,
+      color: const Color(0xFFEAE4DD),
+      child: Center(
+        child: Text(
+          inicial,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF888888),
+          ),
         ),
       ),
     );

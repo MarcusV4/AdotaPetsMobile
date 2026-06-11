@@ -2,10 +2,12 @@ import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
 
 import 'package:flutter/cupertino.dart';
 
-class FavoritesProvider extends ChangeNotifier {
-  final List<PetModelo> _favorites = [];
+import '../../services/pet_service.dart';
 
-  List<PetModelo> get favorites => List.unmodifiable(_favorites);
+class FavoritesProvider extends ChangeNotifier {
+  List<PetModelo> _favorites = [];
+
+  List<PetModelo> get favorites => _favorites;
 
   bool isFavorite(PetModelo pet) => _favorites.any((p) => p.nome == pet.nome);
 
@@ -15,6 +17,23 @@ class FavoritesProvider extends ChangeNotifier {
     } else {
       _favorites.add(pet);
     }
+    notifyListeners();
+  }
+
+  Future<void> atualizarFavoritos() async {
+    final petsAtualizados = await PetService().buscarPets();
+
+    _favorites = _favorites
+        .map((favorito) {
+          try {
+            return petsAtualizados.firstWhere((p) => p.id == favorito.id);
+          } catch (_) {
+            return null;
+          }
+        })
+        .whereType<PetModelo>()
+        .toList();
+
     notifyListeners();
   }
 }

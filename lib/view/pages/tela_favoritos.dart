@@ -8,8 +8,21 @@ import 'package:provider/provider.dart';
 
 import '../widgets/provider_favoritos.dart';
 
-class TelaFavoritos extends StatelessWidget {
+class TelaFavoritos extends StatefulWidget {
   const TelaFavoritos({super.key});
+
+  State<TelaFavoritos> createState() => _TelaFavoritosState();
+}
+
+class _TelaFavoritosState extends State<TelaFavoritos> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FavoritesProvider>().atualizarFavoritos();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +59,10 @@ class TelaFavoritos extends StatelessWidget {
               .where((pet) => pet.disponivelParaAdocao)
               .toList();
 
-          if (favs.favorites.isEmpty) {
+          if (petsDisponiveis.isEmpty) {
             return const FavoritosVazia();
           }
-          return ListaFavoritos(pets: favs.favorites);
+          return ListaFavoritos(pets: petsDisponiveis);
         },
       ),
     );

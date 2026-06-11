@@ -1,27 +1,23 @@
-import 'package:adota_pets_mobile/modelo/conversa_modelo.dart';
+// lib/view/widgets/lista_conversas.dart
 
+import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
 import 'package:adota_pets_mobile/view/widgets/card_conversas.dart';
-import 'package:adota_pets_mobile/view/widgets/titulo_conversas.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ListaConversas extends StatelessWidget {
-  final List<Conversa> conversas;
-  const ListaConversas({required this.conversas});
+  final List<ChatModelo> conversas;
+
+  const ListaConversas({super.key, required this.conversas});
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      children: [
-        TituloConversas(),
-        const SizedBox(height: 20),
-        ...conversas.map(
-          (conversa) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: CardConversas(conversa: conversa),
-          ),
-        ),
-      ],
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      itemCount: conversas.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      itemBuilder: (context, index) {
+        return CardConversas(conversa: conversas[index]);
+      },
     );
   }
 }

@@ -1,24 +1,79 @@
+// lib/view/pages/tela_detalhe_pet.dart
+
+import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
 import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+
 import 'package:adota_pets_mobile/services/pessoa_service.dart';
 import 'package:adota_pets_mobile/services/pet_service.dart';
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
-import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_mensagem.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/provider_auth.dart';
-import '../widgets/provider_favoritos.dart';
+import '../../services/chat_service.dart';
 
 class TelaDetalhePet extends StatelessWidget {
   final PetModelo pet;
 
   const TelaDetalhePet({super.key, required this.pet});
 
-  // Dados extras fixos por enquanto (podem virar campos do PetModel futuramente)
-  String get _species => pet.especie == 'Dog' ? 'Cão' : 'Gato';
+  String get _species => pet.especie;
+
+  Future<void> _abrirChat(BuildContext context) async {
+    final auth = context.read<AuthProvider>();
+    final token = auth.token;
+    final usuarioId = auth.usuarioId;
+    final usuario = auth.usuario;
+
+    if (usuario == null) return;
+
+    try {
+      final service = ChatApiService(token: token);
+
+      // Verifica se já existe chat para este pet
+      final chats = await service.listarChatsPorUsuario(usuarioId);
+      ChatModelo? chatExistente;
+      try {
+        chatExistente = chats.firstWhere((c) => c.pet?.id == pet.id.toString());
+      } catch (_) {
+        chatExistente = null;
+      }
+
+      ChatModelo chat;
+      if (chatExistente != null) {
+        chat = chatExistente;
+      } else {
+        chat = await service.criarChat(
+          petId: pet.id.toString(),
+          pessoa1Id: usuarioId,
+          pessoa2Id: pet.donoId,
+          interessadoId: usuarioId,
+        );
+      }
+
+      if (!context.mounted) return;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+            create: (_) => MensagensProvider(),
+            child: TelaChat(chat: chat),
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao abrir chat: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +86,7 @@ class TelaDetalhePet extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: const Color(0xFFF5F0EB),
-          drawer: DrawerApp(activeItem: DrawerItem.feed),
+          drawer: const DrawerApp(activeItem: DrawerItem.feed),
           appBar: AppBar(
             backgroundColor: const Color(0xFFF5F0EB),
             elevation: 0,
@@ -39,8 +94,7 @@ class TelaDetalhePet extends StatelessWidget {
             leading: Builder(
               builder: (ctx) => IconButton(
                 icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
-                onPressed: () =>
-                    Scaffold.of(ctx).openDrawer(), // ALTERADO: era () {}
+                onPressed: () => Scaffold.of(ctx).openDrawer(),
               ),
             ),
             title: const Text(
@@ -58,12 +112,10 @@ class TelaDetalhePet extends StatelessWidget {
           ),
           body: Column(
             children: [
-              // Conteúdo rolável
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    // Botão voltar
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: const Row(
@@ -85,8 +137,6 @@ class TelaDetalhePet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-
-                    // Imagem hero
                     Stack(
                       children: [
                         ClipRRect(
@@ -112,7 +162,6 @@ class TelaDetalhePet extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Gradiente + info sobre a imagem
                         Positioned(
                           bottom: 0,
                           left: 0,
@@ -154,7 +203,6 @@ class TelaDetalhePet extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Botão favorito
                         Positioned(
                           bottom: 16,
                           right: 16,
@@ -180,8 +228,6 @@ class TelaDetalhePet extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-
-                    // Grid de info
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
@@ -203,8 +249,6 @@ class TelaDetalhePet extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-
-                    // Sobre
                     if (pet.descricao.isNotEmpty)
                       CardSobre(
                         child: Column(
@@ -240,8 +284,6 @@ class TelaDetalhePet extends StatelessWidget {
                         ),
                       ),
                     const SizedBox(height: 12),
-
-                    // Temperamento
                     if (pet.temperamento.isNotEmpty)
                       CardSobre(
                         child: Column(
@@ -290,8 +332,6 @@ class TelaDetalhePet extends StatelessWidget {
                         ),
                       ),
                     const SizedBox(height: 12),
-
-                    // Saúde
                     CardSobre(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,8 +370,6 @@ class TelaDetalhePet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-
-                    // Publicado por
                     CardSobre(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,7 +391,6 @@ class TelaDetalhePet extends StatelessWidget {
                               final inicial = nome.isNotEmpty
                                   ? nome[0].toUpperCase()
                                   : '?';
-
                               return Row(
                                 children: [
                                   Container(
@@ -437,9 +474,7 @@ class TelaDetalhePet extends StatelessWidget {
                                   await PetService().alterarDisponibilidade(
                                     pet.id,
                                   );
-
                                   if (!context.mounted) return;
-
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -449,7 +484,6 @@ class TelaDetalhePet extends StatelessWidget {
                                       ),
                                     ),
                                   );
-
                                   Navigator.pop(context);
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -457,20 +491,7 @@ class TelaDetalhePet extends StatelessWidget {
                                   );
                                 }
                               }
-                            : (isFav
-                                  ? () {
-                                      context
-                                          .read<ConversasProvider>()
-                                          .openChat(pet);
-
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => TelaChat(pet: pet),
-                                        ),
-                                      );
-                                    }
-                                  : null),
+                            : (isFav ? () => _abrirChat(context) : null),
                         icon: const Icon(Icons.chat_bubble_outline, size: 18),
                         label: Text(
                           meuPet

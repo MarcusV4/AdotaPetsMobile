@@ -1,36 +1,33 @@
-import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
-import 'package:adota_pets_mobile/modelo/conversa_modelo.dart';
-import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+// lib/view/widgets/provider_conversas.dart
 
-import 'package:flutter/cupertino.dart';
+import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
+import 'package:adota_pets_mobile/modelo/usuario_logado.dart';
+
+import 'package:flutter/material.dart';
+
+import '../../services/chat_service.dart';
+
+enum ConversasStatus { inicial, carregando, sucesso, erro }
 
 class ConversasProvider extends ChangeNotifier {
-  final List<Conversa> _conversas = [];
+  List<ChatModelo> conversas = [];
+  ConversasStatus status = ConversasStatus.inicial;
+  String? erroMensagem;
 
-  List<Conversa> get conversas => List.unmodifiable(_conversas);
-
-  // Abre ou retorna uma conversa existente para o pet
-  Conversa openChat(PetModelo pet) {
-    final existing = _conversas
-        .where((c) => c.pet.nome == pet.nome)
-        .firstOrNull;
-    if (existing != null) return existing;
-
-    final nova = Conversa(pet: pet);
-    _conversas.add(nova);
+  Future<void> carregarConversas(UsuarioLogado usuario) async {
+    status = ConversasStatus.carregando;
+    erroMensagem = null;
     notifyListeners();
-    return nova;
-  }
 
-  void sendMessage(PetModelo pet, String text) {
-    final conversa = _conversas
-        .where((c) => c.pet.nome == pet.nome)
-        .firstOrNull;
-    if (conversa == null || text.trim().isEmpty) return;
+    try {
+      final service = ChatApiService(token: usuario.token);
+      conversas = await service.listarChatsPorUsuario(usuario.id);
+      status = ConversasStatus.sucesso;
+    } catch (e) {
+      erroMensagem = e.toString();
+      status = ConversasStatus.erro;
+    }
 
-    conversa.messages.add(
-      ChatModelo(text: text.trim(), time: DateTime.now(), isMe: true),
-    );
     notifyListeners();
   }
 }
