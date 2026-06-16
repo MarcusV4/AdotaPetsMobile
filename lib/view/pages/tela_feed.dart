@@ -12,28 +12,38 @@ class TelaFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0EB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F0EB),
-        elevation: 0,
-        titleSpacing: 0,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        // elevation: 0,
+        // titleSpacing: 0,
+        // leading: Builder(
+        //   builder: (ctx) => IconButton(
+        //     icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+        //     onPressed: () => Scaffold.of(ctx).openDrawer(),
+        //   ),
+        // ),
+        title: Text(
+          "AdotaPets",
+          style: TextStyle(
+            // fontSize: 18,
+            // fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
         leading: Builder(
           builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+            icon: Icon(
+              Icons.menu,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             onPressed: () => Scaffold.of(ctx).openDrawer(),
           ),
         ),
-        title: const Text(
-          "AdotaPets",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
-        bottom: const PreferredSize(
+
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Color(0xFFE0D9D1)),
+          child: Divider(height: 1, color: Theme.of(context).dividerColor),
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.feed),

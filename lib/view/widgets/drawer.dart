@@ -42,7 +42,7 @@ class DrawerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,8 +55,8 @@ class DrawerApp extends StatelessWidget {
                   Container(
                     width: 44,
                     height: 44,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE8622A),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -66,7 +66,7 @@ class DrawerApp extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -74,14 +74,14 @@ class DrawerApp extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       Text(
                         'ADOTE COM AMOR',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Color(0xFF888888),
+                          color: Theme.of(context).hintColor,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -90,16 +90,16 @@ class DrawerApp extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(
+                    child: Icon(
                       Icons.close,
-                      color: Color(0xFF888888),
+                      color: Theme.of(context).iconTheme.color,
                       size: 22,
                     ),
                   ),
                 ],
               ),
             ),
-            const Divider(color: Color(0xFFE0D9D1)),
+            Divider(color: Theme.of(context).dividerColor),
             const SizedBox(height: 8),
 
             _DrawerItem(
@@ -146,10 +146,10 @@ class DrawerApp extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFF3EE),
+                  color: Theme.of(context).colorScheme.secondary,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -157,22 +157,37 @@ class DrawerApp extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     SizedBox(height: 4),
                     Text(
                       'Todo pet merece um lar amoroso.\nCompartilhe o app com amigos.',
-                      style: TextStyle(fontSize: 12, color: Color(0xFF888888)),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                     SizedBox(height: 10),
                     Row(
                       children: [
-                        Icon(Icons.pets, size: 16, color: Color(0xFFE8622A)),
+                        Icon(
+                          Icons.pets,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         SizedBox(width: 6),
-                        Icon(Icons.pets, size: 16, color: Color(0xFFE8622A)),
+                        Icon(
+                          Icons.pets,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         SizedBox(width: 6),
-                        Icon(Icons.pets, size: 16, color: Color(0xFFE8622A)),
+                        Icon(
+                          Icons.pets,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ],
                     ),
                   ],
@@ -201,6 +216,9 @@ class _DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       child: GestureDetector(
@@ -208,7 +226,7 @@ class _DrawerItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: isActive ? const Color(0xFFE8622A) : Colors.transparent,
+            color: isActive ? colors.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -216,7 +234,7 @@ class _DrawerItem extends StatelessWidget {
               Icon(
                 icon,
                 size: 20,
-                color: isActive ? Colors.white : const Color(0xFF666666),
+                color: isActive ? colors.onPrimary : theme.iconTheme.color,
               ),
               const SizedBox(width: 14),
               Text(
@@ -224,7 +242,7 @@ class _DrawerItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                  color: isActive ? Colors.white : const Color(0xFF1A1A1A),
+                  color: isActive ? colors.onPrimary : colors.onSurface,
                 ),
               ),
             ],

@@ -191,10 +191,13 @@ class _CadastrarPetModalState extends State<FormCadastro> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.92,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: colors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -205,7 +208,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: const Color(0xFFE0D9D1),
+              color: theme.dividerColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -215,7 +218,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
             child: Row(
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -223,26 +226,26 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: colors.onSurface,
                       ),
                     ),
                     SizedBox(height: 2),
                     Text(
                       'Ajude um pet a encontrar um lar',
-                      style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
+                      style: TextStyle(fontSize: 13, color: theme.hintColor),
                     ),
                   ],
                 ),
                 const Spacer(),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.close, color: Color(0xFF888888)),
+                  child: Icon(Icons.close, color: theme.iconTheme.color),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 8),
-          const Divider(color: Color(0xFFF0EBE5)),
+          Divider(color: theme.dividerColor),
 
           // Conteúdo rolável
           Expanded(
@@ -260,10 +263,10 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                       height: 120,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F0EB),
+                        color: colors.secondary,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: const Color(0xFFE0D9D1),
+                          color: theme.dividerColor,
                           // style: BorderStyle.solid,
                         ),
                       ),
@@ -306,13 +309,13 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                                 ),
                               ],
                             )
-                          : const Column(
+                          : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
                                   Icons.upload_outlined,
                                   size: 28,
-                                  color: Color(0xFF888888),
+                                  color: theme.iconTheme.color,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
@@ -448,8 +451,8 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                             ),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? const Color(0xFFE8622A)
-                                  : const Color(0xFFF5F0EB),
+                                  ? colors.primary
+                                  : colors.secondary,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -458,8 +461,8 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                                 color: isSelected
-                                    ? Colors.white
-                                    : const Color(0xFF1A1A1A),
+                                    ? colors.onPrimary
+                                    : colors.onSurface,
                               ),
                             ),
                           ),
@@ -545,12 +548,12 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? const Color(0xFFE8622A)
-                                : const Color(0xFFF5F0EB),
+                                ? colors.primary
+                                : colors.secondary,
                             borderRadius: BorderRadius.circular(20),
                             border: isSelected
                                 ? null
-                                : Border.all(color: const Color(0xFFE0D9D1)),
+                                : Border.all(color: theme.dividerColor),
                           ),
                           child: Text(
                             _temperamentosLabels[t] ?? t,
@@ -558,7 +561,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                               fontSize: 13,
                               color: isSelected
                                   ? Colors.white
-                                  : const Color(0xFF1A1A1A),
+                                  : colors.onSurface,
                             ),
                           ),
                         ),
@@ -573,17 +576,17 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                     height: 52,
                     child: ElevatedButton(
                       onPressed: _enviando ? null : _cadastrar,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFE8622A),
-                        disabledBackgroundColor: const Color(
-                          0xFFE8622A,
-                        ).withOpacity(0.5),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
+                      // style: ElevatedButton.styleFrom(
+                      //   backgroundColor: const Color(0xFFE8622A),
+                      //   disabledBackgroundColor: const Color(
+                      //     0xFFE8622A,
+                      //   ).withOpacity(0.5),
+                      //   foregroundColor: Colors.white,
+                      //   elevation: 0,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(14),
+                      //   ),
+                      // ),
                       child: _enviando
                           ? const SizedBox(
                               width: 22,
@@ -627,10 +630,10 @@ class _Label extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1A1A1A),
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -649,26 +652,35 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F0EB),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        style: const TextStyle(fontSize: 14, color: Color(0xFF1A1A1A)),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 14,
-          ),
-        ),
-      ),
+    final theme = Theme.of(context);
+
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),
+      decoration: InputDecoration(hintText: hint),
     );
+
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     color: const Color(0xFFF5F0EB),
+    //     borderRadius: BorderRadius.circular(12),
+    //   ),
+    //   child: TextField(
+    //     controller: controller,
+    //     keyboardType: keyboardType,
+    //     style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),
+    //     decoration: InputDecoration(
+    //       hintText: hint,
+    //       hintStyle: const TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
+    //       border: InputBorder.none,
+    //       contentPadding: const EdgeInsets.symmetric(
+    //         horizontal: 14,
+    //         vertical: 14,
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
 
@@ -692,7 +704,7 @@ class _Dropdown extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F0EB),
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
       ),
       child: DropdownButtonHideUnderline(
@@ -700,10 +712,13 @@ class _Dropdown extends StatelessWidget {
           value: value,
           hint: Text(
             hint,
-            style: const TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
+            style: TextStyle(fontSize: 13, color: Theme.of(context).hintColor),
           ),
           isExpanded: true,
-          style: const TextStyle(fontSize: 13, color: Color(0xFF1A1A1A)),
+          style: TextStyle(
+            fontSize: 13,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           items: items
               .map(
                 (i) => DropdownMenuItem(value: i, child: Text(labels[i] ?? i)),
@@ -749,7 +764,7 @@ class _SwitchTile extends StatelessWidget {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: const Color(0xFFE8622A),
+          // activeColor: const Color(0xFFE8622A),
         ),
       ],
     );

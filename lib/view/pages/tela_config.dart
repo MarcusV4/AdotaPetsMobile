@@ -1,8 +1,10 @@
 import 'package:adota_pets_mobile/view/widgets/bloco_config.dart';
 import 'package:adota_pets_mobile/view/widgets/card_config.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TelaConfig extends StatefulWidget {
   const TelaConfig({super.key});
@@ -77,8 +79,8 @@ class _ConfiguracoesScreenState extends State<TelaConfig> {
                 icon: Icons.dark_mode_outlined,
                 label: 'Modo Escuro',
                 subtitle: 'Alternar tema escuro',
-                value: _modoEscuro,
-                onChanged: (v) => setState(() => _modoEscuro = v),
+                value: context.watch<ThemeProvider>().modoEscuro,
+                onChanged: (v) => context.read<ThemeProvider>().definir(v),
               ),
               BlocoConfig(
                 icon: Icons.language_outlined,

@@ -14,9 +14,9 @@ class BotaoFlutuante extends StatelessWidget {
         backgroundColor: Colors.transparent,
         builder: (_) => const FormCadastro(),
       ),
-      backgroundColor: const Color(0xFFE8622A),
+      // backgroundColor: const Color(0xFFE8622A),
       shape: const CircleBorder(),
-      child: const Icon(Icons.add, color: Colors.white, size: 28),
+      child: const Icon(Icons.add, size: 28),
     );
   }
 }

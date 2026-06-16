@@ -12,6 +12,9 @@ class CardPet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
     return Consumer<FavoritesProvider>(
       builder: (context, favs, _) {
         final isFav = favs.isFavorite(pet);
@@ -19,11 +22,13 @@ class CardPet extends StatelessWidget {
           onTap: onTap,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colors.surface,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withOpacity(
+                    theme.brightness == Brightness.dark ? 0.25 : 0.06,
+                  ),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -46,12 +51,12 @@ class CardPet extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => Container(
                           height: 200,
-                          color: const Color(0xFFEAE4DD),
-                          child: const Center(
+                          color: theme.scaffoldBackgroundColor,
+                          child: Center(
                             child: Icon(
                               Icons.pets,
                               size: 48,
-                              color: Color(0xFFBBB3AA),
+                              color: theme.hintColor,
                             ),
                           ),
                         ),
@@ -83,16 +88,16 @@ class CardPet extends StatelessWidget {
                         child: Container(
                           width: 36,
                           height: 36,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
+                          decoration: BoxDecoration(
+                            color: colors.surface,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             isFav ? Icons.favorite : Icons.favorite_border,
                             size: 18,
                             color: isFav
-                                ? const Color(0xFFE8622A)
-                                : const Color(0xFF888888),
+                                ? colors.primary
+                                : theme.iconTheme.color,
                           ),
                         ),
                       ),
@@ -112,17 +117,17 @@ class CardPet extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             pet.raca,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF1A1A1A),
+                              color: colors.surface,
                             ),
                           ),
                           const Spacer(),
                           Text(
                             pet.idade,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF888888),
+                              color: theme.hintColor,
                             ),
                           ),
                         ],
@@ -131,17 +136,17 @@ class CardPet extends StatelessWidget {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.location_on_outlined,
                               size: 14,
-                              color: Color(0xFF888888),
+                              color: theme.iconTheme.color,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               pet.location,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Color(0xFF888888),
+                                color: theme.hintColor,
                               ),
                             ),
                           ],
@@ -161,19 +166,17 @@ class CardPet extends StatelessWidget {
                                     vertical: 5,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFFFF3EE),
+                                    color: colors.secondary,
                                     borderRadius: BorderRadius.circular(20),
                                     border: Border.all(
-                                      color: const Color(
-                                        0xFFE8622A,
-                                      ).withOpacity(0.3),
+                                      color: colors.primary.withOpacity(0.3),
                                     ),
                                   ),
                                   child: Text(
                                     PetModelo.formatarTemperamento(t),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
-                                      color: Color(0xFFE8622A),
+                                      color: colors.primary,
                                     ),
                                   ),
                                 ),
@@ -193,21 +196,51 @@ class CardPet extends StatelessWidget {
   }
 }
 
+// class _TypeBadge extends StatelessWidget {
+//   final String label;
+//   const _TypeBadge({required this.label});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final colors = Theme.of(context).colorScheme;
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+//       decoration: BoxDecoration(
+//         color: colors.secondary,
+//         borderRadius: BorderRadius.circular(20),
+//       ),
+//       child: Text(
+//         label,
+//         style: TextStyle(fontSize: 12, color: colors.onSurface),
+//       ),
+//     );
+//   }
+// }
+
 class _TypeBadge extends StatelessWidget {
   final String label;
+
   const _TypeBadge({required this.label});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 4,
+      ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F0EB),
+        color: colors.secondary,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
-        style: const TextStyle(fontSize: 12, color: Color(0xFF1A1A1A)),
+        style: TextStyle(
+          fontSize: 12,
+          color: colors.onSurface,
+        ),
       ),
     );
   }
