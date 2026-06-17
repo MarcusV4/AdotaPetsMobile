@@ -8,6 +8,7 @@ import 'package:adota_pets_mobile/services/pet_service.dart';
 import 'package:adota_pets_mobile/view/pages/tela_chat.dart';
 import 'package:adota_pets_mobile/view/widgets/drawer.dart';
 import 'package:adota_pets_mobile/view/widgets/infos_pet.dart';
+import 'package:adota_pets_mobile/view/widgets/modal_interessados.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_mensagem.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/chat_service.dart';
+import '../widgets/provider_conversas.dart';
+import '../widgets/provider_interesse.dart';
 
 class TelaDetalhePet extends StatelessWidget {
   final PetModelo pet;
@@ -77,12 +80,14 @@ class TelaDetalhePet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth2 = context.watch<AuthProvider>();
     final usuarioId = context.read<AuthProvider>().usuarioId;
     final meuPet = pet.donoId == usuarioId;
+    final interesses = context.watch<InteresseProvider>();
 
     return Consumer<FavoritesProvider>(
       builder: (context, favs, _) {
-        final isFav = favs.isFavorite(pet);
+        final isFav = interesses.temInteresse(pet.id);
 
         return Scaffold(
           backgroundColor: const Color(0xFFF5F0EB),
@@ -203,28 +208,32 @@ class TelaDetalhePet extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned(
-                          bottom: 16,
-                          right: 16,
-                          child: GestureDetector(
-                            onTap: () => favs.toggle(pet),
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                isFav ? Icons.favorite : Icons.favorite_border,
-                                size: 20,
-                                color: isFav
-                                    ? const Color(0xFFE8622A)
-                                    : const Color(0xFF888888),
+                        if (!meuPet)
+                          Positioned(
+                            bottom: 16,
+                            right: 16,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  _toggleFavorito(context, auth2, interesses),
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  isFav
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  size: 20,
+                                  color: isFav
+                                      ? const Color(0xFFE8622A)
+                                      : const Color(0xFF888888),
+                                ),
                               ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -464,56 +473,60 @@ class TelaDetalhePet extends StatelessWidget {
                 color: const Color(0xFFF5F0EB),
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton.icon(
-                        onPressed: meuPet
-                            ? () async {
-                                try {
-                                  await PetService().alterarDisponibilidade(
-                                    pet.id,
-                                  );
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        pet.disponivelParaAdocao
-                                            ? 'Pet retirado da adoção'
-                                            : 'Pet colocado para adoção',
-                                      ),
-                                    ),
-                                  );
-                                  Navigator.pop(context);
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(e.toString())),
-                                  );
-                                }
-                              }
-                            : (isFav ? () => _abrirChat(context) : null),
-                        icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                        label: Text(
-                          meuPet
-                              ? (pet.disponivelParaAdocao
-                                    ? 'Retirar da adoção'
-                                    : 'Colocar para adoção')
-                              : 'Adotar ${pet.nome}',
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE8622A),
-                          disabledBackgroundColor: const Color(
-                            0xFFE8622A,
-                          ).withOpacity(0.4),
-                          foregroundColor: Colors.white,
-                          disabledForegroundColor: Colors.white70,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                    if (meuPet)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: OutlinedButton.icon(
+                            onPressed: () => _abrirInteressados(context, auth2),
+                            icon: const Icon(
+                              Icons.people_outline,
+                              size: 18,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                            label: const Text(
+                              'Ver Interessados',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color(0xFF1A1A1A),
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFFE0D9D1)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+
+                    // Botão "Adotar" — só para quem NÃO é dono, e só após favoritar
+                    if (!meuPet)
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton.icon(
+                          onPressed: isFav ? () => _abrirChat(context) : null,
+                          icon: const Icon(Icons.chat_bubble_outline, size: 18),
+                          label: Text('Adotar ${pet.nome}'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE8622A),
+                            disabledBackgroundColor: const Color(
+                              0xFFE8622A,
+                            ).withOpacity(0.4),
+                            foregroundColor: Colors.white,
+                            disabledForegroundColor: Colors.white70,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                        ),
+                      ),
+
                     const SizedBox(height: 8),
                     if (!meuPet)
                       Row(
@@ -549,4 +562,44 @@ class TelaDetalhePet extends StatelessWidget {
       },
     );
   }
+
+  Future<void> _toggleFavorito(
+    BuildContext context,
+    AuthProvider auth,
+    InteresseProvider interesses,
+  ) async {
+    try {
+      await interesses.toggleInteresse(
+        petId: pet.id,
+        interessadoId: auth.usuarioId,
+        token: auth.token,
+      );
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  void _abrirInteressados(BuildContext context, AuthProvider auth) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => ModalInteressados(pet: pet, auth: auth),
+    );
+  }
+
+  Widget _imagePlaceholder() => Container(
+    height: 220,
+    decoration: BoxDecoration(
+      color: const Color(0xFFEAE4DD),
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: const Center(
+      child: Icon(Icons.pets, size: 48, color: Color(0xFFBBB3AA)),
+    ),
+  );
 }

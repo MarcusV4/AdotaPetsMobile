@@ -9,11 +9,11 @@ class FavoritesProvider extends ChangeNotifier {
 
   List<PetModelo> get favorites => _favorites;
 
-  bool isFavorite(PetModelo pet) => _favorites.any((p) => p.nome == pet.nome);
+  bool isFavorite(PetModelo pet) => _favorites.any((p) => p.id == pet.id);
 
   void toggle(PetModelo pet) {
     if (isFavorite(pet)) {
-      _favorites.removeWhere((p) => p.nome == pet.nome);
+      _favorites.removeWhere((p) => p.id == pet.id);
     } else {
       _favorites.add(pet);
     }

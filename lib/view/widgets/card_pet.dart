@@ -79,29 +79,29 @@ class CardPet extends StatelessWidget {
                       ),
                     ),
                     // Botão favorito
-                    Positioned(
-                      top: 10,
-                      right: 10,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => favs.toggle(pet),
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: colors.surface,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            isFav ? Icons.favorite : Icons.favorite_border,
-                            size: 18,
-                            color: isFav
-                                ? colors.primary
-                                : theme.iconTheme.color,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 10,
+                    //   right: 10,
+                    //   child: GestureDetector(
+                    //     behavior: HitTestBehavior.opaque,
+                    //     onTap: () => favs.toggle(pet),
+                    //     child: Container(
+                    //       width: 36,
+                    //       height: 36,
+                    //       decoration: BoxDecoration(
+                    //         color: colors.surface,
+                    //         shape: BoxShape.circle,
+                    //       ),
+                    //       child: Icon(
+                    //         isFav ? Icons.favorite : Icons.favorite_border,
+                    //         size: 18,
+                    //         color: isFav
+                    //             ? colors.primary
+                    //             : theme.iconTheme.color,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
 
@@ -227,20 +227,14 @@ class _TypeBadge extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 4,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: colors.secondary,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 12,
-          color: colors.onSurface,
-        ),
+        style: TextStyle(fontSize: 12, color: colors.onSurface),
       ),
     );
   }

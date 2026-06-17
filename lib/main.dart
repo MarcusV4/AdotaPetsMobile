@@ -11,6 +11,7 @@ import 'package:adota_pets_mobile/view/pages/tela_perfil.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_conversas.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
+import 'package:adota_pets_mobile/view/widgets/provider_interesse.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_mensagem.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_theme.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => InteresseProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => MensagensProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
