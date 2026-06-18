@@ -1,5 +1,3 @@
-
-
 import 'package:adota_pets_mobile/view/pages/tela_cadastro.dart';
 import 'package:adota_pets_mobile/view/pages/tela_login.dart';
 import 'package:adota_pets_mobile/view/widgets/aba.dart';
@@ -23,13 +21,27 @@ class AbasAuth extends StatelessWidget {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: const Color(0xFFEAE4DD),
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Aba(label: 'Entrar', isActive: isLogin, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TelaLogin()))),
-          Aba(label: 'Cadastrar', isActive: !isLogin, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TelaCadastro()))),
+          Aba(
+            label: 'Entrar',
+            isActive: isLogin,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const TelaLogin()),
+            ),
+          ),
+          Aba(
+            label: 'Cadastrar',
+            isActive: !isLogin,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const TelaCadastro()),
+            ),
+          ),
         ],
       ),
     );

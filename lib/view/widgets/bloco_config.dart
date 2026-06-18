@@ -30,10 +30,14 @@ class BlocoConfig extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F0EB),
+                  color: Theme.of(context).colorScheme.secondary,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, size: 18, color: const Color(0xFF666666)),
+                child: Icon(
+                  icon,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -42,18 +46,18 @@ class BlocoConfig extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF888888),
+                        color: Theme.of(context).hintColor,
                       ),
                     ),
                   ],
@@ -62,13 +66,13 @@ class BlocoConfig extends StatelessWidget {
               Switch(
                 value: value,
                 onChanged: onChanged,
-                activeColor: const Color(0xFFE8622A),
+                // activeColor: const Color(0xFFE8622A),
               ),
             ],
           ),
         ),
         if (!isLast)
-          const Divider(height: 1, indent: 64, color: Color(0xFFF0EBE5)),
+          Divider(height: 1, indent: 64, color: Theme.of(context).dividerColor),
       ],
     );
   }

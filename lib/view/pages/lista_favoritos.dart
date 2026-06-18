@@ -14,14 +14,14 @@ class ListaFavoritos extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       children: [
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             children: [
               TextSpan(
                 text: 'Seus ',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               TextSpan(

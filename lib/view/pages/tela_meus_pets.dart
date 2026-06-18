@@ -23,7 +23,7 @@ class _TelaMeusPetsState extends State<TelaMeusPets> {
     super.didChangeDependencies();
 
     final usuarioId = context.read<AuthProvider>().usuarioId;
-    print(usuarioId);
+    // print(usuarioId);
 
     _petsFuture = PetService().buscarMeusPets(usuarioId);
   }
@@ -31,28 +31,28 @@ class _TelaMeusPetsState extends State<TelaMeusPets> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0EB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F0EB),
-        elevation: 0,
-        titleSpacing: 0,
-        leading: Builder(
-          builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
-            onPressed: () => Scaffold.of(ctx).openDrawer(),
-          ),
-        ),
-        title: const Text(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        // elevation: 0,
+        // titleSpacing: 0,
+        // leading: Builder(
+        //   builder: (ctx) => IconButton(
+        //     icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+        //     onPressed: () => Scaffold.of(ctx).openDrawer(),
+        //   ),
+        // ),
+        title: Text(
           'AdotaPets',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
+            // fontSize: 18,
+            // fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
-        bottom: const PreferredSize(
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Color(0xFFE0D9D1)),
+          child: Divider(height: 1, color: Theme.of(context).dividerColor),
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.meusPets),
@@ -63,14 +63,14 @@ class _TelaMeusPetsState extends State<TelaMeusPets> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
                   TextSpan(
                     text: 'Meus ',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A1A),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   TextSpan(

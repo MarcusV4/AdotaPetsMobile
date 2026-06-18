@@ -35,9 +35,9 @@ class CardConversas extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -61,10 +61,10 @@ class CardConversas extends StatelessWidget {
                 children: [
                   Text(
                     nomeOutro,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1A1A),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -80,9 +80,9 @@ class CardConversas extends StatelessWidget {
                               : 'Nenhuma mensagem ainda',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
-                            color: Color(0xFF888888),
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         );
                       }

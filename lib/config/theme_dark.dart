@@ -20,7 +20,7 @@ class ThemeDark {
     ),
     scaffoldBackgroundColor: const Color(0xFF0F0B0A),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF1A1A1A),
+      backgroundColor: Color(0xFF0F0B0A),
       foregroundColor: Color(0xFFF0EBE5),
       elevation: 0,
     ),

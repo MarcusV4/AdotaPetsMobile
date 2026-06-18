@@ -80,9 +80,9 @@ class _TelaChatState extends State<TelaChat> {
         : widget.chat.pessoa1?.id;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0EB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         titleSpacing: 0,
         automaticallyImplyLeading: false,
@@ -92,9 +92,9 @@ class _TelaChatState extends State<TelaChat> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).colorScheme.onSurface,
                   size: 22,
                 ),
               ),
@@ -119,18 +119,18 @@ class _TelaChatState extends State<TelaChat> {
                 children: [
                   Text(
                     nomeOutro,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1A1A),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   if (nomePet.isNotEmpty)
                     Text(
                       'Sobre: $nomePet',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF888888),
+                        color: Theme.of(context).hintColor,
                       ),
                     )
                   else if (donoId != null)
@@ -152,9 +152,9 @@ class _TelaChatState extends State<TelaChat> {
             ],
           ),
         ),
-        bottom: const PreferredSize(
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Color(0xFFE0D9D1)),
+          child: Divider(height: 1, color: Theme.of(context).dividerColor),
         ),
       ),
       body: Column(
@@ -198,26 +198,32 @@ class _TelaChatState extends State<TelaChat> {
 
   Widget _buildCampoEnvio() {
     return Container(
-      color: const Color(0xFFF5F0EB),
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
       child: Row(
         children: [
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: const Color(0xFFE0D9D1)),
+                border: Border.all(color: Theme.of(context).dividerColor),
               ),
               child: TextField(
                 controller: _controller,
                 onSubmitted: (_) => _send(),
                 textCapitalization: TextCapitalization.sentences,
                 maxLines: null,
-                style: const TextStyle(fontSize: 14),
-                decoration: const InputDecoration(
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                decoration: InputDecoration(
                   hintText: 'Escreva uma mensagem...',
-                  hintStyle: TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
+                  hintStyle: TextStyle(
+                    fontSize: 13,
+                    color: Theme.of(context).hintColor,
+                  ),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 18,
@@ -234,13 +240,13 @@ class _TelaChatState extends State<TelaChat> {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: const Color(0xFFE8622A).withOpacity(0.2),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.send_outlined,
                 size: 20,
-                color: Color(0xFFE8622A),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -254,14 +260,14 @@ class _TelaChatState extends State<TelaChat> {
     return Container(
       width: 40,
       height: 40,
-      color: const Color(0xFFEAE4DD),
+      color: Theme.of(context).colorScheme.surface,
       child: Center(
         child: Text(
           inicial,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF888888),
+            color: Theme.of(context).hintColor,
           ),
         ),
       ),

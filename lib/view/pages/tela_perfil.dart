@@ -18,33 +18,33 @@ class TelaPerfil extends StatelessWidget {
     final nome = auth.usuarioNome;
     final email = auth.usuarioEmail;
     final inicial = nome.isNotEmpty ? nome[0].toUpperCase() : '?';
-    print(auth.usuarioNome);
-    print(auth.usuarioEmail);
-    print(auth.usuarioId);
+    // print(auth.usuarioNome);
+    // print(auth.usuarioEmail);
+    // print(auth.usuarioId);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0EB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F0EB),
-        elevation: 0,
-        titleSpacing: 0,
-        leading: Builder(
-          builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
-            onPressed: () => Scaffold.of(ctx).openDrawer(),
-          ),
-        ),
-        title: const Text(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        // elevation: 0,
+        // titleSpacing: 0,
+        // leading: Builder(
+        //   builder: (ctx) => IconButton(
+        //     icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+        //     onPressed: () => Scaffold.of(ctx).openDrawer(),
+        //   ),
+        // ),
+        title: Text(
           'AdotaPets',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
-        bottom: const PreferredSize(
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Color(0xFFE0D9D1)),
+          child: Divider(height: 1, color: Theme.of(context).dividerColor),
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.perfil),
@@ -52,12 +52,12 @@ class TelaPerfil extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         children: [
-          const Text(
+          Text(
             'Perfil',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class TelaPerfil extends StatelessWidget {
           // Card principal do perfil
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
@@ -73,8 +73,8 @@ class TelaPerfil extends StatelessWidget {
                 // Banner laranja claro
                 Container(
                   height: 80,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFFF3EE),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(16),
                     ),
@@ -94,7 +94,7 @@ class TelaPerfil extends StatelessWidget {
                           width: 64,
                           height: 64,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE8622A),
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Center(
@@ -103,7 +103,7 @@ class TelaPerfil extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                           ),
@@ -118,7 +118,7 @@ class TelaPerfil extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -127,14 +127,14 @@ class TelaPerfil extends StatelessWidget {
                           Icon(
                             Icons.email_outlined,
                             size: 14,
-                            color: Color(0xFF888888),
+                            color: Theme.of(context).iconTheme.color,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             email,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF888888),
+                              color: Theme.of(context).hintColor,
                             ),
                           ),
                         ],
@@ -148,25 +148,27 @@ class TelaPerfil extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF5F0EB),
+                                color: Theme.of(context).colorScheme.secondary,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
                                 children: [
                                   Text(
                                     '$favCount',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFFE8622A),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
-                                  const Text(
+                                  Text(
                                     'Favoritos',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Color(0xFF888888),
+                                      color: Theme.of(context).hintColor,
                                     ),
                                   ),
                                 ],
@@ -178,17 +180,19 @@ class TelaPerfil extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF5F0EB),
+                                color: Theme.of(context).colorScheme.secondary,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Column(
+                              child: Column(
                                 children: [
                                   Text(
                                     '0',
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFFE8622A),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                     ),
                                   ),
                                   SizedBox(height: 2),
@@ -196,7 +200,7 @@ class TelaPerfil extends StatelessWidget {
                                     'Pedidos',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Color(0xFF888888),
+                                      color: Theme.of(context).hintColor,
                                     ),
                                   ),
                                 ],
@@ -215,21 +219,23 @@ class TelaPerfil extends StatelessWidget {
                             context.read<AuthProvider>().sair();
                             Navigator.pushReplacementNamed(context, '/login');
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.logout_outlined,
                             size: 18,
-                            color: Color(0xFF1A1A1A),
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
-                          label: const Text(
+                          label: Text(
                             'Sair',
                             style: TextStyle(
                               fontSize: 15,
-                              color: Color(0xFF1A1A1A),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            side: const BorderSide(color: Color(0xFFE0D9D1)),
+                            side: BorderSide(
+                              color: Theme.of(context).dividerColor,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),

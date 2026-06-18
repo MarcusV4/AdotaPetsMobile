@@ -27,7 +27,9 @@ class BolhaMensagem extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
-              color: isMe ? const Color(0xFFE8622A) : Colors.white,
+              color: isMe
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(18),
                 topRight: const Radius.circular(18),
@@ -39,14 +41,16 @@ class BolhaMensagem extends StatelessWidget {
               message.conteudo,
               style: TextStyle(
                 fontSize: 14,
-                color: isMe ? Colors.white : const Color(0xFF1A1A1A),
+                color: isMe
+                    ? Colors.white
+                    : Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
           const SizedBox(height: 3),
           Text(
             _formatTime(message.dataEnvio),
-            style: const TextStyle(fontSize: 10, color: Color(0xFF888888)),
+            style: TextStyle(fontSize: 10, color: Theme.of(context).hintColor),
           ),
         ],
       ),

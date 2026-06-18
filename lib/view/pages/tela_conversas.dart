@@ -37,29 +37,29 @@ class _TelaConversasState extends State<TelaConversas> {
     final provider = context.watch<ConversasProvider>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0EB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F0EB),
-        elevation: 0,
-        titleSpacing: 0,
-        leading: Builder(
-          builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
-            onPressed: () => Scaffold.of(ctx).openDrawer(),
-          ),
-        ),
-        title: const Text(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        // elevation: 0,
+        // titleSpacing: 0,
+        // leading: Builder(
+        //   builder: (ctx) => IconButton(
+        //     icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+        //     onPressed: () => Scaffold.of(ctx).openDrawer(),
+        //   ),
+        // ),
+        title: Text(
           'AdotaPets',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         actions: [
           // Botão de recarregar manual
           IconButton(
-            icon: const Icon(Icons.refresh, color: Color(0xFF1A1A1A)),
+            icon: Icon(Icons.refresh, color: Theme.of(context).iconTheme.color),
             onPressed: () {
               final usuario = context.read<AuthProvider>().usuario;
               if (usuario != null) {
@@ -68,9 +68,9 @@ class _TelaConversasState extends State<TelaConversas> {
             },
           ),
         ],
-        bottom: const PreferredSize(
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Color(0xFFE0D9D1)),
+          child: Divider(height: 1, color: Theme.of(context).dividerColor),
         ),
       ),
       drawer: const DrawerApp(activeItem: DrawerItem.conversas),

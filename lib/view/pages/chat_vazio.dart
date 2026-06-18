@@ -15,24 +15,28 @@ class ChatVazio extends StatelessWidget {
             width: 72,
             height: 72,
             decoration: BoxDecoration(
-              color: const Color(0xFFE8622A).withOpacity(0.15),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.pets, size: 34, color: Color(0xFFE8622A)),
+            child: Icon(
+              Icons.pets,
+              size: 34,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'Conversa iniciada!',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A1A),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             'Apresente-se e pergunte sobre $petName',
-            style: const TextStyle(fontSize: 13, color: Color(0xFF888888)),
+            style: TextStyle(fontSize: 13, color: Theme.of(context).hintColor),
           ),
         ],
       ),

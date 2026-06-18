@@ -19,10 +19,10 @@ class ConversasVazia extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Ícone sem fundo colorido, apenas o outline cinza
-                  const Icon(
+                  Icon(
                     Icons.chat_bubble_outline,
                     size: 64,
-                    color: Color(0xFFBBB3AA),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(height: 20),
                   const Text(

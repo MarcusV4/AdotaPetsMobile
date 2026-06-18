@@ -1,3 +1,4 @@
+import 'package:adota_pets_mobile/modelo/interesse_modelo.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +18,39 @@ class ModalInteressados extends StatefulWidget {
 }
 
 class _InteressadosModalState extends State<ModalInteressados> {
-  late Future<List<InteressadoModelo>> _futureInteressados;
+  late Future<_InteressadosData> _futureData;
   final InteresseService _service = InteresseService();
   final Set<String> _aprovando = {}; // ids em processo de aprovação
 
   @override
   void initState() {
     super.initState();
-    _futureInteressados = _service.listarInteressados(
-      petId: widget.pet.id,
-      token: widget.auth.token,
+    _futureData = _carregarDados();
+  }
+
+  Future<_InteressadosData> _carregarDados() async {
+    final results = await Future.wait([
+      _service.listarInteressados(
+        petId: widget.pet.id,
+        token: widget.auth.token,
+      ),
+      _service.buscarInteressesPorPet(
+        petId: widget.pet.id,
+        token: widget.auth.token,
+      ),
+    ]);
+
+    final interessados = results[0] as List<InteressadoModelo>;
+    final interesses = results[1] as List<InteresseModelo>;
+
+    // Monta mapa: interessadoId → interesseId
+    final mapaInteresses = {
+      for (final i in interesses) i.interessadoId: i.interesseId,
+    };
+
+    return _InteressadosData(
+      interessados: interessados,
+      mapaInteresses: mapaInteresses,
     );
   }
 
@@ -117,8 +141,8 @@ class _InteressadosModalState extends State<ModalInteressados> {
 
           // Lista
           Flexible(
-            child: FutureBuilder<List<InteressadoModelo>>(
-              future: _futureInteressados,
+            child: FutureBuilder<_InteressadosData>(
+              future: _futureData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Padding(
@@ -137,7 +161,8 @@ class _InteressadosModalState extends State<ModalInteressados> {
                   );
                 }
 
-                final lista = snapshot.data ?? [];
+                final lista = snapshot.data!.interessados;
+                final mapa = snapshot.data!.mapaInteresses;
 
                 if (lista.isEmpty) {
                   return const Padding(
@@ -282,4 +307,14 @@ class _InteressadosModalState extends State<ModalInteressados> {
       ),
     );
   }
+}
+
+class _InteressadosData {
+  final List<InteressadoModelo> interessados;
+  final Map<String, String> mapaInteresses; // interessadoId → interesseId
+
+  const _InteressadosData({
+    required this.interessados,
+    required this.mapaInteresses,
+  });
 }

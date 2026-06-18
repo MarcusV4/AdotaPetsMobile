@@ -68,9 +68,12 @@ class _TelaLoginState extends State<TelaLogin> {
   }
 
   void _mostrarErro(String msg) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      ),
+    );
   }
 
   @override
@@ -89,13 +92,16 @@ class _TelaLoginState extends State<TelaLogin> {
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 "Entre para continuar adotando pets!",
-                style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
 
               const SizedBox(height: 26),
@@ -129,9 +135,12 @@ class _TelaLoginState extends State<TelaLogin> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       "Não tem conta?",
-                      style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
 
                     GestureDetector(
@@ -143,7 +152,7 @@ class _TelaLoginState extends State<TelaLogin> {
                         "Cadastre-se",
                         style: TextStyle(
                           fontSize: 13,
-                          color: Color(0xFFE8622A),
+                          color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

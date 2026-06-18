@@ -45,6 +45,24 @@ class InteresseService {
     }
   }
 
+  // Lista todos os interesses de um pet (com interesseId, petId, interessadoId)
+  Future<List<InteresseModelo>> buscarInteressesPorPet({
+    required String petId,
+    required String token,
+  }) async {
+    final response = await http.get(
+      Uri.parse('$urlBase/interesses/pet/$petId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final List json = jsonDecode(response.body);
+      return json.map((e) => InteresseModelo.fromJson(e)).toList();
+    } else {
+      throw Exception('Erro ao buscar interesses (${response.statusCode})');
+    }
+  }
+
   // Lista todos os interessados em um pet
   Future<List<InteressadoModelo>> listarInteressados({
     required String petId,

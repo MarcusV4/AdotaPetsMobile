@@ -86,12 +86,12 @@ class _FeedBodyState extends State<BodyFeed> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       children: [
         // Título
-        const Text(
+        Text(
           'Encontre Seu Novo',
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1A1A1A),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const Text(
@@ -112,28 +112,34 @@ class _FeedBodyState extends State<BodyFeed> {
         // Busca
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE0D9D1)),
+            border: Border.all(color: Theme.of(context).dividerColor),
           ),
           child: TextField(
             controller: _searchController,
             onChanged: (v) => setState(() => _searchQuery = v),
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             decoration: InputDecoration(
               hintText: 'Buscar por nome, raça ou temperamento...',
-              hintStyle: TextStyle(fontSize: 13, color: Color(0xFFBBB3AA)),
+              hintStyle: TextStyle(
+                fontSize: 13,
+                color: Theme.of(context).hintColor,
+              ),
               prefixIcon: Icon(
                 Icons.search,
-                color: Color(0xFFBBB3AA),
+                color: Theme.of(context).iconTheme.color,
                 size: 20,
               ),
               suffixIcon: _searchQuery.isNotEmpty
                   ? IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close,
                         size: 18,
-                        color: Color(0xFF888888),
+                        color: Theme.of(context).iconTheme.color,
                       ),
                       onPressed: () {
                         _searchController.clear();
@@ -165,12 +171,14 @@ class _FeedBodyState extends State<BodyFeed> {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: isActive ? const Color(0xFFE8622A) : Colors.white,
+                      color: isActive
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
                         color: isActive
-                            ? const Color(0xFFE8622A)
-                            : const Color(0xFFE0D9D1),
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).dividerColor,
                       ),
                     ),
                     child: Row(
@@ -179,8 +187,8 @@ class _FeedBodyState extends State<BodyFeed> {
                         IconTheme(
                           data: IconThemeData(
                             color: isActive
-                                ? Colors.white
-                                : const Color(0xFF888888),
+                                ? Theme.of(context).colorScheme.onPrimary
+                                : Theme.of(context).iconTheme.color,
                             size: 14,
                           ),
                           child: f.icon,
@@ -192,8 +200,8 @@ class _FeedBodyState extends State<BodyFeed> {
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: isActive
-                                ? Colors.white
-                                : const Color(0xFF1A1A1A),
+                                ? Theme.of(context).colorScheme.onPrimary
+                                : Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                       ],

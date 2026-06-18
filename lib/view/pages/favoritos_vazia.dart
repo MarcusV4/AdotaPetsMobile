@@ -25,14 +25,14 @@ class FavoritosVazia extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   children: [
                     TextSpan(
                       text: "Seus ",
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     TextSpan(
@@ -60,24 +60,24 @@ class FavoritosVazia extends StatelessWidget {
                     Container(
                       width: 90,
                       height: 90,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFDD835),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
                         shape: BoxShape.circle,
                       ),
 
-                      child: const Icon(
+                      child: Icon(
                         Icons.favorite,
-                        color: Color(0xFF1A1A1A),
+                        color: Colors.white,
                         size: 44,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       "Nenhum favorito ainda",
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 8),

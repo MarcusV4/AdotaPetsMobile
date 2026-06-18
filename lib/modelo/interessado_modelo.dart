@@ -11,7 +11,7 @@ class InteressadoModelo {
 
   factory InteressadoModelo.fromJson(Map<String, dynamic> json) {
     return InteressadoModelo(
-      id: json['pessoaId']?.toString() ?? json['id']?.toString() ?? '',
+      id: json['id']?.toString() ?? '',
       nome: json['nome'] as String? ?? '',
       email: json['email'] as String? ?? '',
     );

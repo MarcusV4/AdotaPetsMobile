@@ -16,10 +16,19 @@ class Aba extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: isActive ? Colors.white : Colors.transparent,
+            color: isActive
+                ? Theme.of(context).colorScheme.surface
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(9),
-            boxShadow: isActive
-                ? [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6, offset: const Offset(0, 2))]
+            boxShadow:
+                isActive && Theme.of(context).brightness == Brightness.light
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
                 : null,
           ),
           child: Center(
@@ -28,7 +37,9 @@ class Aba extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF888888),
+                color: isActive
+                    ? Theme.of(context).colorScheme.onSurface
+                    : Theme.of(context).hintColor,
               ),
             ),
           ),

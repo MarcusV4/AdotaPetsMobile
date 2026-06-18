@@ -11,10 +11,9 @@ class InteresseModelo {
 
   factory InteresseModelo.fromJson(Map<String, dynamic> json) {
     return InteresseModelo(
-      interesseId:
-          json['interesseId']?.toString() ?? json['id']?.toString() ?? '',
-      petId: json['petId']?.toString() ?? '',
-      interessadoId: json['interessadoId']?.toString() ?? '',
+      interesseId: json['idInteresse']?.toString() ?? '',
+      petId: json['idPet']?.toString() ?? '',
+      interessadoId: json['idInteressado']?.toString() ?? '',
     );
   }
 }

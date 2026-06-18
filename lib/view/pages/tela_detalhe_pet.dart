@@ -1,7 +1,11 @@
 // lib/view/pages/tela_detalhe_pet.dart
 
+import 'dart:ui';
+
 import 'package:adota_pets_mobile/modelo/chat_modelo.dart';
+import 'package:adota_pets_mobile/modelo/pessoa_modelo.dart';
 import 'package:adota_pets_mobile/modelo/pet_modelo.dart';
+import 'package:adota_pets_mobile/modelo/usuario_logado.dart';
 
 import 'package:adota_pets_mobile/services/pessoa_service.dart';
 import 'package:adota_pets_mobile/services/pet_service.dart';
@@ -14,18 +18,39 @@ import 'package:adota_pets_mobile/view/widgets/provider_favoritos.dart';
 import 'package:adota_pets_mobile/view/widgets/provider_mensagem.dart';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../../services/chat_service.dart';
 import '../widgets/provider_conversas.dart';
 import '../widgets/provider_interesse.dart';
 
-class TelaDetalhePet extends StatelessWidget {
+class TelaDetalhePet extends StatefulWidget {
   final PetModelo pet;
-
   const TelaDetalhePet({super.key, required this.pet});
 
+  @override
+  State<TelaDetalhePet> createState() => _TelaDetalhePetState();
+}
+
+class _TelaDetalhePetState extends State<TelaDetalhePet> {
+  late Future<PessoaModelo?> _futureDonoAtual;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureDonoAtual = PessoaService().buscarPorId(widget.pet.donoId);
+  }
+
+  PetModelo get pet => widget.pet;
   String get _species => pet.especie;
+
+  //   State<TelaDetalhePet> createState() => _TelaDetalhePetState();
+  // }
+
+  // class _TelaDetalhePetState extends State<TelaDetalhePet>{
+
+  // String get _species => pet.especie;
 
   Future<void> _abrirChat(BuildContext context) async {
     final auth = context.read<AuthProvider>();
@@ -90,29 +115,29 @@ class TelaDetalhePet extends StatelessWidget {
         final isFav = interesses.temInteresse(pet.id);
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF5F0EB),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           drawer: const DrawerApp(activeItem: DrawerItem.feed),
           appBar: AppBar(
-            backgroundColor: const Color(0xFFF5F0EB),
-            elevation: 0,
-            titleSpacing: 0,
-            leading: Builder(
-              builder: (ctx) => IconButton(
-                icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
-                onPressed: () => Scaffold.of(ctx).openDrawer(),
-              ),
-            ),
-            title: const Text(
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+            // elevation: 0,
+            // titleSpacing: 0,
+            // leading: Builder(
+            //   builder: (ctx) => IconButton(
+            //     icon: const Icon(Icons.menu, color: Color(0xFF1A1A1A)),
+            //     onPressed: () => Scaffold.of(ctx).openDrawer(),
+            //   ),
+            // ),
+            title: Text(
               'AdotaPets',
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A1A),
+                // fontSize: 18,
+                // fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
-            bottom: const PreferredSize(
+            bottom: PreferredSize(
               preferredSize: Size.fromHeight(1),
-              child: Divider(height: 1, color: Color(0xFFE0D9D1)),
+              child: Divider(height: 1, color: Theme.of(context).dividerColor),
             ),
           ),
           body: Column(
@@ -123,25 +148,27 @@ class TelaDetalhePet extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(
                             Icons.arrow_back,
                             size: 18,
-                            color: Color(0xFF1A1A1A),
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           SizedBox(width: 4),
                           Text(
                             'Voltar',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Color(0xFF1A1A1A),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    // Imagem hero
                     Stack(
                       children: [
                         ClipRRect(
@@ -154,14 +181,14 @@ class TelaDetalhePet extends StatelessWidget {
                             errorBuilder: (_, __, ___) => Container(
                               height: 220,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFEAE4DD),
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: Icon(
                                   Icons.pets,
                                   size: 48,
-                                  color: Color(0xFFBBB3AA),
+                                  color: Theme.of(context).hintColor,
                                 ),
                               ),
                             ),
@@ -218,8 +245,8 @@ class TelaDetalhePet extends StatelessWidget {
                               child: Container(
                                 width: 40,
                                 height: 40,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.surface,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -267,10 +294,12 @@ class TelaDetalhePet extends StatelessWidget {
                               children: [
                                 Text(
                                   'Sobre ${pet.nome}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1A1A1A),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                   ),
                                 ),
                                 const SizedBox(width: 6),
@@ -283,9 +312,11 @@ class TelaDetalhePet extends StatelessWidget {
                             const SizedBox(height: 10),
                             Text(
                               pet.descricao,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
-                                color: Color(0xFF555555),
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.color,
                                 height: 1.6,
                               ),
                             ),
@@ -298,12 +329,12 @@ class TelaDetalhePet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Temperamento',
                               style: TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF1A1A1A),
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -318,12 +349,15 @@ class TelaDetalhePet extends StatelessWidget {
                                         vertical: 6,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFFFFF3EE),
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary.withOpacity(0.12),
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                          color: const Color(
-                                            0xFFE8622A,
-                                          ).withOpacity(0.3),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.3),
                                         ),
                                       ),
                                       child: Text(
@@ -345,34 +379,34 @@ class TelaDetalhePet extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Saúde',
                             style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1A1A1A),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 12),
                           if (pet.vacinado)
-                            const CardSaude(
+                            CardSaude(
                               icon: Icons.shield_outlined,
-                              color: Color(0xFF4CAF50),
+                              color: Theme.of(context).colorScheme.onSurface,
                               label: 'Vacinado',
                             ),
                           if (pet.vacinado) const SizedBox(height: 8),
                           if (pet.castrado)
-                            const CardSaude(
+                            CardSaude(
                               icon: Icons.content_cut,
-                              color: Color(0xFF2196F3),
+                              color: Theme.of(context).colorScheme.onSurface,
                               label: 'Castrado',
                             ),
                           if (!pet.vacinado && !pet.castrado)
-                            const Text(
+                            Text(
                               'Sem informações de saúde',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Color(0xFF888888),
+                                color: Theme.of(context).hintColor,
                               ),
                             ),
                         ],
@@ -383,16 +417,17 @@ class TelaDetalhePet extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Publicado por',
                             style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF888888),
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 12),
-                          FutureBuilder(
-                            future: PessoaService().buscarPorId(pet.donoId),
+                          FutureBuilder<PessoaModelo?>(
+                            future: _futureDonoAtual,
                             builder: (context, snapshot) {
                               final nome =
                                   snapshot.data?.nome ?? 'Carregando...';
@@ -406,16 +441,18 @@ class TelaDetalhePet extends StatelessWidget {
                                     width: 44,
                                     height: 44,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFEAE4DD),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.surface,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Center(
                                       child: Text(
                                         inicial,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF888888),
+                                          color: Theme.of(context).hintColor,
                                         ),
                                       ),
                                     ),
@@ -427,27 +464,33 @@ class TelaDetalhePet extends StatelessWidget {
                                     children: [
                                       Text(
                                         nome,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
-                                          color: Color(0xFF1A1A1A),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface,
                                         ),
                                       ),
                                       if (email.isNotEmpty) ...[
                                         const SizedBox(height: 2),
                                         Row(
                                           children: [
-                                            const Icon(
+                                            Icon(
                                               Icons.email_outlined,
                                               size: 12,
-                                              color: Color(0xFF888888),
+                                              color: Theme.of(
+                                                context,
+                                              ).iconTheme.color,
                                             ),
-                                            const SizedBox(width: 4),
+                                            SizedBox(width: 4),
                                             Text(
                                               email,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 12,
-                                                color: Color(0xFF888888),
+                                                color: Theme.of(
+                                                  context,
+                                                ).hintColor,
                                               ),
                                             ),
                                           ],
@@ -470,7 +513,7 @@ class TelaDetalhePet extends StatelessWidget {
               // Botão fixo no rodapé
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-                color: const Color(0xFFF5F0EB),
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
                     if (meuPet)
@@ -481,20 +524,47 @@ class TelaDetalhePet extends StatelessWidget {
                           height: 48,
                           child: OutlinedButton.icon(
                             onPressed: () => _abrirInteressados(context, auth2),
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.people_outline,
                               size: 18,
-                              color: Color(0xFF1A1A1A),
+                              color: Theme.of(context).iconTheme.color,
                             ),
-                            label: const Text(
+                            label: Text(
                               'Ver Interessados',
                               style: TextStyle(
                                 fontSize: 15,
-                                color: Color(0xFF1A1A1A),
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFFE0D9D1)),
+                              side: BorderSide(
+                                color: Theme.of(context).dividerColor,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    if (meuPet)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: ElevatedButton.icon(
+                            onPressed: () => _colocarParaAdocao(context, auth2),
+                            icon: const Icon(
+                              Icons.volunteer_activism_outlined,
+                              size: 18,
+                            ),
+                            label: Text("Colocar ${pet.nome} para Adoção"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFE8622A),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
@@ -537,7 +607,7 @@ class TelaDetalhePet extends StatelessWidget {
                             size: 14,
                             color: isFav
                                 ? const Color(0xFFE8622A)
-                                : const Color(0xFF888888),
+                                : Theme.of(context).hintColor,
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -548,7 +618,7 @@ class TelaDetalhePet extends StatelessWidget {
                               fontSize: 12,
                               color: isFav
                                   ? const Color(0xFFE8622A)
-                                  : const Color(0xFF888888),
+                                  : Theme.of(context).hintColor,
                             ),
                           ),
                         ],
@@ -570,10 +640,14 @@ class TelaDetalhePet extends StatelessWidget {
   ) async {
     try {
       await interesses.toggleInteresse(
-        petId: pet.id,
+        pet: pet,
         interessadoId: auth.usuarioId,
         token: auth.token,
       );
+
+      if (context.mounted) {
+        context.read<FavoritesProvider>().toggle(pet);
+      }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -595,11 +669,42 @@ class TelaDetalhePet extends StatelessWidget {
   Widget _imagePlaceholder() => Container(
     height: 220,
     decoration: BoxDecoration(
-      color: const Color(0xFFEAE4DD),
+      color: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(16),
     ),
-    child: const Center(
-      child: Icon(Icons.pets, size: 48, color: Color(0xFFBBB3AA)),
+    child: Center(
+      child: Icon(Icons.pets, size: 48, color: Theme.of(context).hintColor),
     ),
   );
+
+  Future<void> _colocarParaAdocao(
+    BuildContext context,
+    AuthProvider auth,
+  ) async {
+    try {
+      final response = await http.put(
+        Uri.parse('http://192.168.18.26:8080/api/pets/adocao/${pet.id}'),
+        headers: {'Authorization': 'Bearer ${auth.token}'},
+      );
+
+      if (response.statusCode == 200) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${pet.nome} está disponível para adoção! 🐾'),
+              backgroundColor: const Color(0xFFE8622A),
+            ),
+          );
+        }
+      } else {
+        throw Exception('Erro ${response.statusCode}');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
 }

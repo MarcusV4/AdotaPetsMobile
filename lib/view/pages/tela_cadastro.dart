@@ -74,9 +74,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
   }
 
   void _mostrarErro(String msg) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      ),
+    );
   }
 
   @override
@@ -90,18 +93,21 @@ class _TelaCadastroState extends State<TelaCadastro> {
             children: [
               const LogoAdotapets(),
               const SizedBox(height: 32),
-              const Text(
+              Text(
                 "Crie sua conta!",
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 32),
-              const Text(
+              Text(
                 "Cadastre-se e encontre o seu novo pet!",
-                style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
               const SizedBox(height: 28),
               AbasAuth(
@@ -136,17 +142,20 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       "Já tem conta?",
-                      style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Text(
+                      child: Text(
                         "Entrar",
                         style: TextStyle(
                           fontSize: 13,
-                          color: Color(0xFFE8622A),
+                          color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

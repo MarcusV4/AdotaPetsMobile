@@ -19,12 +19,12 @@ class LogoAdotapets extends StatelessWidget {
           child: const Icon(Icons.favorite, color: Colors.white, size: 20),
         ),
         const SizedBox(width: 10),
-        const Text(
+        Text(
           'AdotaPets',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF1A1A1A),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ],

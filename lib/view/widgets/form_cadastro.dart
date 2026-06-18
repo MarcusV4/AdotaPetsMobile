@@ -356,6 +356,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                                 'Peixe',
                                 'Roedor',
                                 'Réptil',
+                                'Outro',
                               ],
                               labels: const {
                                 'Cachorro': 'Cachorro',
@@ -364,6 +365,7 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                                 'Peixe': 'Peixe',
                                 'Roedor': 'Roedor',
                                 'Reptil': 'Réptil',
+                                'Outro': 'Outro',
                               },
                               onChanged: (v) => setState(() => _especie = v),
                             ),
@@ -576,17 +578,17 @@ class _CadastrarPetModalState extends State<FormCadastro> {
                     height: 52,
                     child: ElevatedButton(
                       onPressed: _enviando ? null : _cadastrar,
-                      // style: ElevatedButton.styleFrom(
-                      //   backgroundColor: const Color(0xFFE8622A),
-                      //   disabledBackgroundColor: const Color(
-                      //     0xFFE8622A,
-                      //   ).withOpacity(0.5),
-                      //   foregroundColor: Colors.white,
-                      //   elevation: 0,
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(14),
-                      //   ),
-                      // ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFE8622A),
+                        disabledBackgroundColor: const Color(
+                          0xFFE8622A,
+                        ).withOpacity(0.5),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
                       child: _enviando
                           ? const SizedBox(
                               width: 22,
@@ -752,10 +754,10 @@ class _SwitchTile extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF1A1A1A),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],
